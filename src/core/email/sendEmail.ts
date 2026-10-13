@@ -9,24 +9,31 @@ type Message = { to: string; subject: string; html: string; text: string };
  * Swapping providers only means changing this one function.
  */
 export async function sendEmail(message: Message): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.warn(`[email] RESEND_API_KEY not set, not sending. To: ${message.to}\n${message.text}`);
-    return;
-  }
+	const apiKey = process.env.RESEND_API_KEY;
+	if (!apiKey) {
+		console.warn(
+			`[email] RESEND_API_KEY not set, not sending. To: ${message.to}\n${message.text}`,
+		);
+		return;
+	}
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: appConfig.email.from,
-      to: message.to,
-      subject: message.subject,
-      html: message.html,
-      text: message.text,
-    }),
-  });
-  if (!response.ok) {
-    throw new Error(`Email provider responded ${response.status}: ${await response.text()}`);
-  }
+	const response = await fetch("https://api.resend.com/emails", {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			from: appConfig.email.from,
+			to: message.to,
+			subject: message.subject,
+			html: message.html,
+			text: message.text,
+		}),
+	});
+	if (!response.ok) {
+		throw new Error(
+			`Email provider responded ${response.status}: ${await response.text()}`,
+		);
+	}
 }

@@ -8,16 +8,19 @@ import { PrismaClient } from "../generated/prisma/client";
 // instead of one module-level singleton. Hyperdrive pools the real connections
 // on Cloudflare's side, so a new client per use stays cheap.
 function createClient() {
-  const adapter = new PrismaPg({ connectionString: env.HYPERDRIVE.connectionString, max: 1 });
-  return new PrismaClient({ adapter });
+	const adapter = new PrismaPg({
+		connectionString: env.HYPERDRIVE.connectionString,
+		max: 1,
+	});
+	return new PrismaClient({ adapter });
 }
 
 const prisma = new Proxy({} as PrismaClient, {
-  get(_target, prop) {
-    const client = createClient();
-    const value = Reflect.get(client, prop);
-    return typeof value === "function" ? value.bind(client) : value;
-  },
+	get(_target, prop) {
+		const client = createClient();
+		const value = Reflect.get(client, prop);
+		return typeof value === "function" ? value.bind(client) : value;
+	},
 });
 
 export { prisma };

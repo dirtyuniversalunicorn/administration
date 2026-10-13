@@ -1,43 +1,46 @@
 {
-  "name": "administration",
-  "version": "0.1.0",
-  "private": true,
-  "packageManager": "npm",
-  "dependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
-    "@vinext/cloudflare": "latest",
-    "better-auth": "^1.7.7",
-    "dotenv": "^18.0.7",
-    "pg": "^8.23.1",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-server-dom-webpack": "latest",
-    "vinext": "latest"
-  },
-  "devDependencies": {
-    "@cloudflare/vite-plugin": "latest",
-    "@tailwindcss/postcss": "latest",
-    "@types/node": "^26.6.5",
-    "@types/pg": "^8.23.1",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "@vitejs/plugin-react": "latest",
-    "@vitejs/plugin-rsc": "latest",
-    "prisma": "^7.10.0",
-    "tailwindcss": "latest",
-    "typescript": "latest",
-    "vite": "latest",
-    "wrangler": "^4.149.0"
-  },
-  "type": "module",
-  "scripts": {
-    "postinstall": "prisma generate",
-    "dev": "vinext dev",
-    "build": "vinext build",
-    "start": "wrangler dev --config dist/server/wrangler.json",
-    "deploy": "vinext-cloudflare deploy --config dist/server/wrangler.json",
-    "preview": "npm run build && npm run start --",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./worker-configuration.d.ts"
-  }
+	"name": "administration",
+	"version": "0.1.0",
+	"private": true,
+	"packageManager": "npm",
+	"dependencies": {
+		"@prisma/adapter-pg": "^7.10.0",
+		"@prisma/client": "^7.10.0",
+		"@vinext/cloudflare": "latest",
+		"better-auth": "^1.7.7",
+		"dotenv": "^18.0.7",
+		"pg": "^8.23.1",
+		"react": "latest",
+		"react-dom": "latest",
+		"react-server-dom-webpack": "latest",
+		"vinext": "latest"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@cloudflare/vite-plugin": "latest",
+		"@tailwindcss/postcss": "latest",
+		"@types/node": "^26.6.5",
+		"@types/pg": "^8.23.1",
+		"@types/react": "latest",
+		"@types/react-dom": "latest",
+		"@vitejs/plugin-react": "latest",
+		"@vitejs/plugin-rsc": "latest",
+		"prisma": "^7.10.0",
+		"tailwindcss": "latest",
+		"typescript": "latest",
+		"vite": "latest",
+		"wrangler": "^4.149.0"
+	},
+	"type": "module",
+	"scripts": {
+		"postinstall": "prisma generate",
+		"dev": "vinext dev",
+		"build": "vinext build",
+		"start": "wrangler dev --config dist/server/wrangler.json",
+		"deploy": "vinext-cloudflare deploy --config dist/server/wrangler.json",
+		"preview": "npm run build && npm run start --",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./worker-configuration.d.ts",
+		"biome:check": "npx biome check",
+		"biome:fix": "npx biome check --write"
+	}
 }
