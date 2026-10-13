@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { appConfig } from "@/src/core/config/appConfig";
-import { getThemeStyle } from "@/src/core/config/theme";
-import "./globals.css";
+import { Provider } from "@/components/ui/provider";
+import { appConfig } from "@/core/config/appConfig";
+import { getThemeColors } from "@/core/config/theme";
 
 export const metadata: Metadata = {
 	title: appConfig.site.name,
@@ -12,8 +12,17 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang={appConfig.site.locale} style={getThemeStyle()}>
-			<body>{children}</body>
+		<html lang={appConfig.site.locale} suppressHydrationWarning>
+			<body>
+				{/* Themes are light-only for now, so dark mode is switched off. */}
+				<Provider
+					colors={getThemeColors()}
+					forcedTheme="light"
+					defaultTheme="light"
+				>
+					{children}
+				</Provider>
+			</body>
 		</html>
 	);
 }

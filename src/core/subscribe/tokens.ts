@@ -1,4 +1,4 @@
-import { appConfig } from "@/src/core/config/appConfig";
+import { appConfig } from "../config/appConfig";
 
 /** 256-bit random token, hex encoded. Must be called inside a request (Workers). */
 export function randomToken(): string {

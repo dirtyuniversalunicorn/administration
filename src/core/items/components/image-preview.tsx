@@ -1,32 +1,42 @@
-// Pure CSS hover preview: the big image only exists as a hidden element until
-// the row's icon is hovered, so no client JS is needed.
+"use client";
+
+import { HoverCard, IconButton, Image, Portal } from "@chakra-ui/react";
+import { LuImage } from "react-icons/lu";
+
+/**
+ * Image icon with a large preview card on hover. The card is rendered in a
+ * portal, so the table's scroll area can never clip it.
+ */
 export function ImagePreview({ src, alt }: { src: string; alt: string }) {
 	return (
-		<span className="group relative inline-block">
-			<span
-				role="img"
-				aria-label={`Preview of ${alt}`}
-				className="inline-flex h-8 w-8 items-center justify-center rounded border border-line-strong bg-background text-muted"
-			>
-				<svg
-					viewBox="0 0 24 24"
-					className="h-4 w-4"
-					fill="none"
-					stroke="currentColor"
-					strokeWidth="2"
-					aria-hidden="true"
+		<HoverCard.Root
+			openDelay={80}
+			closeDelay={80}
+			positioning={{ placement: "right-start" }}
+		>
+			<HoverCard.Trigger asChild>
+				<IconButton
+					aria-label={`Preview of ${alt}`}
+					size="xs"
+					variant="outline"
 				>
-					<rect x="3" y="3" width="18" height="18" rx="2" />
-					<circle cx="9" cy="9" r="2" />
-					<path d="m21 15-5-5L5 21" />
-				</svg>
-			</span>
-			<img
-				src={src}
-				alt={alt}
-				loading="lazy"
-				className="pointer-events-none absolute left-10 top-1/2 z-20 hidden max-h-[70vh] w-[32rem] max-w-[60vw] -translate-y-1/2 rounded-md border border-line-strong bg-surface object-contain shadow-lg group-hover:block"
-			/>
-		</span>
+					<LuImage />
+				</IconButton>
+			</HoverCard.Trigger>
+			<Portal>
+				<HoverCard.Positioner>
+					<HoverCard.Content p="2" w="32rem" maxW="60vw">
+						<Image
+							src={src}
+							alt={alt}
+							w="full"
+							maxH="70vh"
+							objectFit="contain"
+							rounded="sm"
+						/>
+					</HoverCard.Content>
+				</HoverCard.Positioner>
+			</Portal>
+		</HoverCard.Root>
 	);
 }

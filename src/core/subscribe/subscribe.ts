@@ -1,6 +1,6 @@
-import { appConfig } from "@/src/core/config/appConfig";
-import { sendEmail } from "@/src/core/email/sendEmail";
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
+import { appConfig } from "../config/appConfig";
+import { sendEmail } from "../email/sendEmail";
 import { confirmUrl, randomToken } from "./tokens";
 
 /** Feature flag (appConfig.subscription.isEnabled). */

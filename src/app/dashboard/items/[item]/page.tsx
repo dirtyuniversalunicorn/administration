@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
-import { prisma } from "@/src/lib/prisma";
+import { ItemDetail } from "@/core/items/components/item-detail";
+import { prisma } from "@/lib/prisma";
 
 export default async function Item({
 	params,
@@ -14,33 +14,17 @@ export default async function Item({
 	});
 	if (!item) notFound();
 
-	const rows: [string, string][] = [
-		["Category", item.category],
-		["Technique", item.technique],
-		["Status", item.status === "ACTIVE" ? "Active" : "Inactive"],
-		["Posted by", item.postedBy.name ?? item.postedBy.email],
-		["Created", item.createdAt.toLocaleString("en-GB")],
-		["Edited", item.editedAt.toLocaleString("en-GB")],
-	];
-
 	return (
-		<section className="flex flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-muted">
-				← All items
-			</a>
-			<img
-				src={item.imageUrl}
-				alt={`${item.category}, ${item.technique}`}
-				className="w-full rounded-md border border-line object-cover"
-			/>
-			<dl className="grid grid-cols-[8rem_1fr] gap-y-2 text-sm">
-				{rows.map(([label, value]) => (
-					<div key={label} className="contents">
-						<dt className="text-muted">{label}</dt>
-						<dd className="capitalize">{value}</dd>
-					</div>
-				))}
-			</dl>
-		</section>
+		<ItemDetail
+			item={{
+				category: item.category,
+				technique: item.technique,
+				imageUrl: item.imageUrl,
+				status: item.status,
+				postedBy: item.postedBy.name ?? item.postedBy.email,
+				created: item.createdAt.toLocaleString("en-GB"),
+				edited: item.editedAt.toLocaleString("en-GB"),
+			}}
+		/>
 	);
 }

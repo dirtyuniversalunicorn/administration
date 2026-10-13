@@ -1,50 +1,46 @@
 "use client";
 
+import { Alert, Button, Stack } from "@chakra-ui/react";
 import { useActionState } from "react";
+import { TextField } from "@/core/ui/text-field";
 import {
 	type CreateUserState,
 	createUserAction,
 } from "../actions/createUserAction";
 
 const initial: CreateUserState = { ok: false, message: "" };
-const input =
-	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function RegisterForm() {
 	const [state, action, pending] = useActionState(createUserAction, initial);
 
 	return (
-		<form action={action} className="flex flex-col gap-4">
-			<input className={input} name="name" placeholder="Name" required />
-			<input
-				className={input}
-				name="email"
-				type="email"
-				placeholder="Email"
-				required
-			/>
-			<input
-				className={input}
-				name="password"
-				type="password"
-				placeholder="Password (min. 8 characters)"
-				minLength={8}
-				required
-			/>
-			<button
-				type="submit"
-				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-				disabled={pending}
-			>
-				{pending ? "Creating..." : "Create user"}
-			</button>
-			{state.message && (
-				<p
-					className={state.ok ? "text-sm text-success" : "text-sm text-danger"}
+		<form action={action}>
+			<Stack gap="4">
+				<TextField label="Name" name="name" required />
+				<TextField label="Email" name="email" type="email" required />
+				<TextField
+					label="Password"
+					name="password"
+					type="password"
+					placeholder="At least 8 characters"
+					minLength={8}
+					required
+				/>
+				<Button
+					type="submit"
+					colorPalette="brand"
+					loading={pending}
+					loadingText="Creating..."
 				>
-					{state.message}
-				</p>
-			)}
+					Create user
+				</Button>
+				{state.message && (
+					<Alert.Root status={state.ok ? "success" : "error"}>
+						<Alert.Indicator />
+						<Alert.Title>{state.message}</Alert.Title>
+					</Alert.Root>
+				)}
+			</Stack>
 		</form>
 	);
 }

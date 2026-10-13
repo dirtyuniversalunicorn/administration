@@ -1,3 +1,9 @@
+import { Heading } from "@chakra-ui/react";
+
 export default async function Dashboard() {
-	return <h1 className="text-2xl font-semibold">Dashboard</h1>;
+	return (
+		<Heading as="h1" size="2xl">
+			Dashboard
+		</Heading>
+	);
 }

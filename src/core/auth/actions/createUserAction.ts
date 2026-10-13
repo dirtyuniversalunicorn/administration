@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { appConfig } from "@/src/core/config/appConfig";
-import { auth } from "@/src/lib/auth";
-import { createUser } from "@/src/lib/create-user";
+import { appConfig } from "@/core/config/appConfig";
+import { auth } from "@/lib/auth";
+import { createUser } from "@/lib/create-user";
 
 export type CreateUserState = { ok: boolean; message: string };
 

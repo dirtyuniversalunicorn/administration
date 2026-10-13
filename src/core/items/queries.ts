@@ -1,4 +1,4 @@
-import { prisma } from "@/src/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Everything the client-facing app may show: ACTIVE items only. Use these two
