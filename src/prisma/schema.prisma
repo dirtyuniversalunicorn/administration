@@ -9,6 +9,14 @@ generator client {
   runtime  = "workerd"
 }
 
+// Same models, Node runtime: only used by the seed script (src/prisma/seed.ts).
+// The app itself runs on Cloudflare Workers and uses the workerd client above.
+generator seedClient {
+  provider = "prisma-client"
+  output   = "../generated/prisma-node"
+  runtime  = "nodejs"
+}
+
 datasource db {
   provider = "postgresql"
 }
@@ -23,6 +31,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  items         Item[]
 
   @@map("user")
 }
@@ -100,4 +109,20 @@ model Subscription {
 
   @@index([status])
   @@map("subscription")
+}
+
+model Item {
+  id         String   @id @default(cuid())
+  postedById String
+  postedBy   User     @relation(fields: [postedById], references: [id])
+  createdAt  DateTime @default(now())
+  editedAt   DateTime @updatedAt
+  category   String
+  imageUrl   String
+  technique  String
+
+  @@index([postedById])
+  @@index([category])
+  @@index([createdAt])
+  @@map("item")
 }

@@ -13,3 +13,4 @@ next-env.d.ts
 /generated/prisma
 /src/generated/prisma
 tsconfig.tsbuildinfo
+/src/generated/prisma-node

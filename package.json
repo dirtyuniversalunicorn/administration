@@ -27,6 +27,7 @@
 		"@vitejs/plugin-rsc": "latest",
 		"prisma": "^7.10.0",
 		"tailwindcss": "latest",
+		"tsx": "^4.23.15",
 		"typescript": "latest",
 		"vite": "latest",
 		"wrangler": "^4.149.0"
@@ -34,6 +35,7 @@
 	"type": "module",
 	"scripts": {
 		"postinstall": "prisma generate",
+		"db:seed": "prisma db seed",
 		"dev": "vinext dev",
 		"build": "vinext build",
 		"start": "wrangler dev --config dist/server/wrangler.json",
