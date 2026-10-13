@@ -7,6 +7,8 @@ const routes = {
 	items: "/dashboard/items",
 	/** Detail page of one item (app/dashboard/items/[item]). */
 	item: (id: string) => `/dashboard/items/${encodeURIComponent(id)}`,
+	itemNew: "/dashboard/items/new",
+	itemEdit: (id: string) => `/dashboard/items/${encodeURIComponent(id)}/edit`,
 	users: "/dashboard/users",
 	subscriptions: "/dashboard/subscriptions",
 	translations: "/dashboard/translations",
