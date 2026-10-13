@@ -1,3 +1,83 @@
+/** Every color the UI uses. Pages use these through Tailwind classes like bg-primary. */
+export type ThemeColors = {
+	/** Page background and subtle fills (table header, inactive rows). */
+	background: string;
+	/** Cards, tables, inputs, modals. */
+	surface: string;
+	/** Main text. */
+	foreground: string;
+	/** Secondary text. */
+	muted: string;
+	/** Hairline borders and dividers. */
+	line: string;
+	/** Borders of inputs and buttons. */
+	lineStrong: string;
+	/** Brand color: main buttons, active filter. */
+	primary: string;
+	/** Text on top of primary. */
+	primaryForeground: string;
+	/** Destructive actions and error messages. */
+	danger: string;
+	/** Success text and the Active badge. */
+	success: string;
+	successSoft: string;
+};
+
+const themePresets = {
+	slate: {
+		background: "#f8fafc",
+		surface: "#ffffff",
+		foreground: "#111827",
+		muted: "#475569",
+		line: "#e2e8f0",
+		lineStrong: "#cbd5e1",
+		primary: "#0f172a",
+		primaryForeground: "#ffffff",
+		danger: "#dc2626",
+		success: "#15803d",
+		successSoft: "#dcfce7",
+	},
+	indigo: {
+		background: "#f5f6ff",
+		surface: "#ffffff",
+		foreground: "#1e1b4b",
+		muted: "#52525b",
+		line: "#e0e7ff",
+		lineStrong: "#c7d2fe",
+		primary: "#4338ca",
+		primaryForeground: "#ffffff",
+		danger: "#dc2626",
+		success: "#15803d",
+		successSoft: "#dcfce7",
+	},
+	emerald: {
+		background: "#f4faf7",
+		surface: "#ffffff",
+		foreground: "#052e16",
+		muted: "#4b5563",
+		line: "#d1fae5",
+		lineStrong: "#a7f3d0",
+		primary: "#047857",
+		primaryForeground: "#ffffff",
+		danger: "#dc2626",
+		success: "#15803d",
+		successSoft: "#dcfce7",
+	},
+	rose: {
+		background: "#fff7f8",
+		surface: "#ffffff",
+		foreground: "#4c0519",
+		muted: "#6b7280",
+		line: "#fecdd3",
+		lineStrong: "#fda4af",
+		primary: "#be123c",
+		primaryForeground: "#ffffff",
+		danger: "#b91c1c",
+		success: "#15803d",
+		successSoft: "#dcfce7",
+	},
+} satisfies Record<string, ThemeColors>;
+
 const routes = {
 	/** Public landing page with the login form. */
 	login: "/",
@@ -86,6 +166,18 @@ export const appConfig = {
 		/** Must be an address on a domain verified with the email provider. */
 		from: "Administration <no-reply@example.com>",
 		confirmSubject: "Please confirm your subscription",
+	},
+
+	theme: {
+		/**
+		 * Which preset to use: "slate" | "indigo" | "emerald" | "rose". Set the THEME
+		 * variable on the Worker to switch without touching code. Add a new preset
+		 * by adding another entry to themePresets above.
+		 */
+		active: "slate" as keyof typeof themePresets,
+		presets: themePresets as Record<string, ThemeColors>,
+		/** Override single colors on top of the active preset, e.g. { primary: "#7c3aed" }. */
+		overrides: {} as Partial<ThemeColors>,
 	},
 
 	nav: [

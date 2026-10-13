@@ -11,7 +11,7 @@ type Props = {
 
 const initial: ItemFormState = { ok: false, message: "" };
 const input =
-	"w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm";
+	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function ItemForm({ action, submitLabel, defaults }: Props) {
 	const [state, formAction, pending] = useActionState(action, initial);
@@ -44,16 +44,14 @@ export function ItemForm({ action, submitLabel, defaults }: Props) {
 			/>
 			<button
 				type="submit"
-				className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
 				disabled={pending}
 			>
 				{pending ? "Saving..." : submitLabel}
 			</button>
 			{state.message && (
 				<p
-					className={
-						state.ok ? "text-sm text-green-700" : "text-sm text-red-600"
-					}
+					className={state.ok ? "text-sm text-success" : "text-sm text-danger"}
 				>
 					{state.message}
 				</p>

@@ -15,7 +15,7 @@ export function DeleteItemButton({ id, label }: { id: string; label: string }) {
 		<form action={action}>
 			<button
 				type="button"
-				className="text-red-600 hover:underline"
+				className="text-danger hover:underline"
 				onClick={() => setOpen(true)}
 			>
 				Delete

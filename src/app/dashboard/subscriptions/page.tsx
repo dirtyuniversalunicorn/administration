@@ -1,3 +1,3 @@
-export default async function Subscriptions(){
-    return <p>Subscription page</p>
+export default async function Subscriptions() {
+	return <p>Subscription page</p>;
 }

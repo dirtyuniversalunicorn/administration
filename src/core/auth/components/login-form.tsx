@@ -5,7 +5,7 @@ import { appConfig } from "@/src/core/config/appConfig";
 import { authClient } from "@/src/lib/auth-client";
 
 const input =
-	"w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm";
+	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function LoginForm() {
 	const [error, setError] = useState("");
@@ -46,12 +46,12 @@ export function LoginForm() {
 			/>
 			<button
 				type="submit"
-				className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
 				disabled={pending}
 			>
 				{pending ? "Signing in..." : "Sign in"}
 			</button>
-			{error && <p className="text-sm text-red-600">{error}</p>}
+			{error && <p className="text-sm text-danger">{error}</p>}
 		</form>
 	);
 }

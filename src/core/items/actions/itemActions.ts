@@ -90,3 +90,23 @@ export async function deleteItemAction(id: string): Promise<void> {
 	revalidatePath(appConfig.routes.item(id));
 	redirect(appConfig.routes.items);
 }
+
+/**
+ * Soft state change instead of deleting: INACTIVE items stay in the database but
+ * disappear from the client-facing app. Bind both args in the page:
+ * `setItemStatusAction.bind(null, item.id, "INACTIVE")`.
+ */
+export async function setItemStatusAction(
+	id: string,
+	status: "ACTIVE" | "INACTIVE",
+): Promise<void> {
+	const session = await getSession();
+	if (!session) throw new Error("Not authorized.");
+
+	await prisma.item.updateMany({
+		where: { id },
+		data: { status, deactivatedAt: status === "INACTIVE" ? new Date() : null },
+	});
+	revalidatePath(appConfig.routes.items);
+	revalidatePath(appConfig.routes.item(id));
+}

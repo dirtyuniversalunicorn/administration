@@ -17,6 +17,7 @@ export default async function Item({
 	const rows: [string, string][] = [
 		["Category", item.category],
 		["Technique", item.technique],
+		["Status", item.status === "ACTIVE" ? "Active" : "Inactive"],
 		["Posted by", item.postedBy.name ?? item.postedBy.email],
 		["Created", item.createdAt.toLocaleString("en-GB")],
 		["Edited", item.editedAt.toLocaleString("en-GB")],
@@ -24,18 +25,18 @@ export default async function Item({
 
 	return (
 		<section className="flex flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-slate-600">
+			<a href={appConfig.routes.items} className="text-sm text-muted">
 				← All items
 			</a>
 			<img
 				src={item.imageUrl}
 				alt={`${item.category}, ${item.technique}`}
-				className="w-full rounded-md border border-slate-200 object-cover"
+				className="w-full rounded-md border border-line object-cover"
 			/>
 			<dl className="grid grid-cols-[8rem_1fr] gap-y-2 text-sm">
 				{rows.map(([label, value]) => (
 					<div key={label} className="contents">
-						<dt className="text-slate-500">{label}</dt>
+						<dt className="text-muted">{label}</dt>
 						<dd className="capitalize">{value}</dd>
 					</div>
 				))}

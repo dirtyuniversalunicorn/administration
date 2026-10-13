@@ -9,8 +9,8 @@ export default async function Home() {
 	if (session) redirect(appConfig.routes.home);
 
 	return (
-		<main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 text-slate-950">
-			<div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6">
+		<main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
+			<div className="w-full max-w-sm rounded-lg border border-line bg-surface p-6">
 				<h1 className="mb-6 text-xl font-semibold">Sign in</h1>
 				<LoginForm />
 			</div>

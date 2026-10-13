@@ -63,16 +63,16 @@ export function ConfirmModal({
 			onKeyDown={(e) => {
 				if (e.key === "Escape" && !pending) onCancel();
 			}}
-			className="m-auto w-full max-w-md rounded-lg bg-white p-0 text-slate-950 shadow-xl backdrop:bg-slate-900/50"
+			className="m-auto w-full max-w-md rounded-lg bg-surface p-0 text-foreground shadow-xl backdrop:bg-foreground/50"
 		>
 			<div className="flex flex-col gap-3 p-6">
 				<h2 className="text-lg font-semibold">{title}</h2>
-				{children && <div className="text-sm text-slate-600">{children}</div>}
+				{children && <div className="text-sm text-muted">{children}</div>}
 			</div>
-			<div className="flex justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-3">
+			<div className="flex justify-end gap-3 border-t border-line bg-background px-6 py-3">
 				<button
 					type="button"
-					className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium hover:bg-slate-100 disabled:opacity-50"
+					className="rounded-md border border-line-strong bg-surface px-4 py-2 text-sm font-medium hover:bg-background disabled:opacity-50"
 					disabled={pending}
 					onClick={onCancel}
 				>
@@ -80,10 +80,10 @@ export function ConfirmModal({
 				</button>
 				<button
 					type={confirmType}
-					className={`rounded-md px-4 py-2 text-sm font-medium text-white disabled:opacity-50 ${
+					className={`rounded-md px-4 py-2 text-sm font-medium disabled:opacity-50 ${
 						destructive
-							? "bg-red-600 hover:bg-red-700"
-							: "bg-slate-900 hover:bg-slate-700"
+							? "bg-danger text-white hover:opacity-90"
+							: "bg-primary text-primary-foreground hover:opacity-90"
 					}`}
 					disabled={pending}
 					onClick={confirmType === "button" ? onConfirm : undefined}

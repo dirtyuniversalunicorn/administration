@@ -15,7 +15,7 @@ export default async function EditItem({
 
 	return (
 		<section className="flex flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-slate-600">
+			<a href={appConfig.routes.items} className="text-sm text-muted">
 				← All items
 			</a>
 			<h1 className="text-2xl font-semibold">Edit item</h1>

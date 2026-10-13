@@ -14,9 +14,9 @@ export default async function Users() {
 
 			<h2 className="text-xl font-semibold">Users ({users.length})</h2>
 			{users.length === 0 ? (
-				<p className="text-sm text-slate-600">No users yet.</p>
+				<p className="text-sm text-muted">No users yet.</p>
 			) : (
-				<ul className="flex flex-col divide-y divide-slate-200 rounded-md border border-slate-200 bg-white">
+				<ul className="flex flex-col divide-y divide-line rounded-md border border-line bg-surface">
 					{users.map((user) => (
 						<li
 							key={user.id}
@@ -24,9 +24,9 @@ export default async function Users() {
 						>
 							<div className="flex flex-col">
 								<span className="font-medium">{user.name ?? "—"}</span>
-								<span className="text-slate-600">{user.email}</span>
+								<span className="text-muted">{user.email}</span>
 							</div>
-							<span className="text-slate-500">
+							<span className="text-muted">
 								{user.createdAt.toLocaleDateString("en-GB")}
 							</span>
 						</li>

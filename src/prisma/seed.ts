@@ -77,7 +77,15 @@ async function main() {
 		};
 		await prisma.item.upsert({
 			where: { id },
-			create: { id, ...data },
+			// Status only on create, so re-running the seed never overrides your changes.
+			// The last item starts INACTIVE to demo the hidden state.
+			create: {
+				id,
+				...data,
+				...(i === items.length - 1
+					? { status: "INACTIVE" as const, deactivatedAt: new Date() }
+					: {}),
+			},
 			update: data,
 		});
 	}

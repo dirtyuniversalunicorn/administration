@@ -111,16 +111,24 @@ model Subscription {
   @@map("subscription")
 }
 
-model Item {
-  id         String   @id @default(cuid())
-  postedById String
-  postedBy   User     @relation(fields: [postedById], references: [id])
-  createdAt  DateTime @default(now())
-  editedAt   DateTime @updatedAt
-  category   String
-  imageUrl   String
-  technique  String
+enum ItemStatus {
+  ACTIVE // shown in the client-facing app
+  INACTIVE // hidden from the client-facing app, kept in the database
+}
 
+model Item {
+  id            String     @id @default(cuid())
+  postedById    String
+  postedBy      User       @relation(fields: [postedById], references: [id])
+  createdAt     DateTime   @default(now())
+  editedAt      DateTime   @updatedAt
+  category      String
+  imageUrl      String
+  technique     String
+  status        ItemStatus @default(ACTIVE)
+  deactivatedAt DateTime?
+
+  @@index([status])
   @@index([postedById])
   @@index([category])
   @@index([createdAt])
