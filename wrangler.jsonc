@@ -6,6 +6,9 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "administration",
 	"compatibility_date": "2026-10-13",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"main": "vinext/server/fetch-handler",
 	"assets": {
 		"directory": "dist/client",
@@ -18,7 +21,13 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "add84138656a4012aa07bb029410d70b"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
