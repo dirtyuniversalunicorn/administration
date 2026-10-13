@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { appConfig } from "@/src/core/config/appConfig";
@@ -50,6 +51,7 @@ export async function createItemAction(
 		console.error("createItemAction failed", error);
 		return { ok: false, message: "Failed to create the item." };
 	}
+	revalidatePath(appConfig.routes.items);
 	redirect(appConfig.routes.items);
 }
 
@@ -72,6 +74,8 @@ export async function updateItemAction(
 		console.error("updateItemAction failed", error);
 		return { ok: false, message: "Failed to save. Does the item still exist?" };
 	}
+	revalidatePath(appConfig.routes.items);
+	revalidatePath(appConfig.routes.item(id));
 	redirect(appConfig.routes.items);
 }
 
@@ -82,5 +86,7 @@ export async function deleteItemAction(id: string): Promise<void> {
 
 	// deleteMany: deleting an already-removed item is not an error.
 	await prisma.item.deleteMany({ where: { id } });
+	revalidatePath(appConfig.routes.items);
+	revalidatePath(appConfig.routes.item(id));
 	redirect(appConfig.routes.items);
 }

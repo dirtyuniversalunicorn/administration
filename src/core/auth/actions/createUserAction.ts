@@ -1,6 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { appConfig } from "@/src/core/config/appConfig";
 import { auth } from "@/src/lib/auth";
 import { createUser } from "@/src/lib/create-user";
 
@@ -22,6 +24,7 @@ export async function createUserAction(
 
 	try {
 		await createUser({ name, email, password });
+		revalidatePath(appConfig.routes.users);
 		return { ok: true, message: `User ${email} created.` };
 	} catch (e) {
 		return {
