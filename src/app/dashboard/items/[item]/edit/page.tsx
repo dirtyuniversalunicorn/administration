@@ -1,8 +1,8 @@
+import { Heading, Link, Stack } from "@chakra-ui/react";
 import { notFound } from "next/navigation";
 import { appConfig } from "@/core/config/appConfig";
 import { updateItemAction } from "@/core/items/actions/itemActions";
 import { ItemForm } from "@/core/items/components/item-form";
-import { BackLink, PageStack, PageTitle } from "@/core/ui/page-parts";
 import { prisma } from "@/lib/prisma";
 
 export default async function EditItem({
@@ -15,9 +15,13 @@ export default async function EditItem({
 	if (!item) notFound();
 
 	return (
-		<PageStack>
-			<BackLink href={appConfig.routes.items}>← All items</BackLink>
-			<PageTitle>Edit item</PageTitle>
+		<Stack gap="6">
+			<Link href={appConfig.routes.items} color="fg.muted" fontSize="sm">
+				← All items
+			</Link>
+			<Heading as="h1" size="2xl">
+				Edit item
+			</Heading>
 			<ItemForm
 				action={updateItemAction.bind(null, item.id)}
 				submitLabel="Save changes"
@@ -27,6 +31,6 @@ export default async function EditItem({
 					imageUrl: item.imageUrl,
 				}}
 			/>
-		</PageStack>
+		</Stack>
 	);
 }
