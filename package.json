@@ -36,6 +36,7 @@
 	"scripts": {
 		"postinstall": "prisma generate",
 		"db:seed": "prisma db seed",
+		"check:hyperdrive": "node scripts/check-hyperdrive.mjs",
 		"dev": "vinext dev",
 		"build": "vinext build",
 		"start": "wrangler dev --config dist/server/wrangler.json",
