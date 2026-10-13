@@ -74,3 +74,30 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+enum SubscriptionStatus {
+  PENDING // signed up, email not confirmed yet
+  ACTIVE // confirmed via the link in the confirmation email
+  INACTIVE // unsubscribed via the link in an email
+}
+
+// Visitor subscription with double opt-in. Rows are never deleted: unsubscribing
+// sets INACTIVE (+ cancelledAt); subscribing again goes back through PENDING.
+model Subscription {
+  id                    String             @id @default(cuid())
+  email                 String             @unique
+  status                SubscriptionStatus @default(PENDING)
+  // Random single-use token in the confirmation link; cleared once confirmed.
+  confirmToken          String?            @unique
+  confirmTokenExpiresAt DateTime?
+  confirmSentAt         DateTime?
+  // Random permanent token used in unsubscribe links inside emails.
+  unsubscribeToken      String             @unique
+  subscribedAt          DateTime?
+  cancelledAt           DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  @@index([status])
+  @@map("subscription")
+}

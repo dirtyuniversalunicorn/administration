@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { authClient } from "@/src/lib/auth-client";
+import { appConfig } from "@/src/core/config/appConfig";
 
 const input = "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm";
 
@@ -23,7 +24,7 @@ export function LoginForm() {
       setPending(false);
       return;
     }
-    window.location.href = "/dashboard";
+    window.location.href = appConfig.routes.home;
   }
 
   return (

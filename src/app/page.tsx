@@ -2,10 +2,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/src/lib/auth";
 import { LoginForm } from "../core/auth/components/login-form";
+import { appConfig } from "@/src/core/config/appConfig";
 
 export default async function Home() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (session) redirect("/dashboard");
+  if (session) redirect(appConfig.routes.home);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 text-slate-950">
