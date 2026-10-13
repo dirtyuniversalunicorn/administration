@@ -32,6 +32,7 @@
   },
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "wrangler dev --config dist/server/wrangler.json",
