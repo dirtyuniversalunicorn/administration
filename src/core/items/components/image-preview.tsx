@@ -25,7 +25,7 @@ export function ImagePreview({ src, alt }: { src: string; alt: string }) {
 				src={src}
 				alt={alt}
 				loading="lazy"
-				className="pointer-events-none absolute left-10 top-1/2 z-20 hidden max-h-64 w-64 -translate-y-1/2 rounded-md border border-slate-300 bg-white object-cover shadow-lg group-hover:block"
+				className="pointer-events-none absolute left-10 top-1/2 z-20 hidden max-h-[70vh] w-[32rem] max-w-[60vw] -translate-y-1/2 rounded-md border border-slate-300 bg-white object-contain shadow-lg group-hover:block"
 			/>
 		</span>
 	);
