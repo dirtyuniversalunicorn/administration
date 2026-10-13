@@ -1,9 +1,5 @@
-import { Heading } from "@chakra-ui/react";
+import { PageTitle } from "@/core/ui/page-parts";
 
 export default async function Dashboard() {
-	return (
-		<Heading as="h1" size="2xl">
-			Dashboard
-		</Heading>
-	);
+	return <PageTitle>Dashboard</PageTitle>;
 }
