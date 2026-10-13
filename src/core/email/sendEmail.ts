@@ -1,4 +1,4 @@
-import { appConfig } from "../config/appConfig";
+import { appConfig } from "@/src/core/config/appConfig";
 
 type Message = { to: string; subject: string; html: string; text: string };
 

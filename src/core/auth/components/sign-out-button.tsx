@@ -1,20 +1,19 @@
 "use client";
 
-import { Button } from "@chakra-ui/react";
-import { appConfig } from "@/core/config/appConfig";
-import { authClient } from "@/lib/auth-client";
+import { appConfig } from "@/src/core/config/appConfig";
+import { authClient } from "@/src/lib/auth-client";
 
 export function SignOutButton() {
 	return (
-		<Button
-			size="sm"
-			variant="outline"
+		<button
+			type="submit"
+			className="rounded-md border border-line-strong px-3 py-1 hover:bg-background"
 			onClick={async () => {
 				await authClient.signOut();
 				window.location.href = appConfig.routes.login;
 			}}
 		>
 			Sign out
-		</Button>
+		</button>
 	);
 }

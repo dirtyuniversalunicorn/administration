@@ -1,10 +1,11 @@
 "use client";
 
-import { Alert, Button, Stack } from "@chakra-ui/react";
 import { useState } from "react";
-import { appConfig } from "@/core/config/appConfig";
-import { TextField } from "@/core/ui/text-field";
-import { authClient } from "@/lib/auth-client";
+import { appConfig } from "@/src/core/config/appConfig";
+import { authClient } from "@/src/lib/auth-client";
+
+const input =
+	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function LoginForm() {
 	const [error, setError] = useState("");
@@ -24,29 +25,33 @@ export function LoginForm() {
 			setPending(false);
 			return;
 		}
-		window.location.href = appConfig.routes.dashboard;
+		window.location.href = appConfig.routes.home;
 	}
 
 	return (
-		<form onSubmit={onSubmit}>
-			<Stack gap="4">
-				<TextField label="Email" name="email" type="email" required />
-				<TextField label="Password" name="password" type="password" required />
-				<Button
-					type="submit"
-					colorPalette="brand"
-					loading={pending}
-					loadingText="Signing in..."
-				>
-					Sign in
-				</Button>
-				{error && (
-					<Alert.Root status="error">
-						<Alert.Indicator />
-						<Alert.Title>{error}</Alert.Title>
-					</Alert.Root>
-				)}
-			</Stack>
+		<form onSubmit={onSubmit} className="flex flex-col gap-4">
+			<input
+				className={input}
+				name="email"
+				type="email"
+				placeholder="Email"
+				required
+			/>
+			<input
+				className={input}
+				name="password"
+				type="password"
+				placeholder="Password"
+				required
+			/>
+			<button
+				type="submit"
+				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
+				disabled={pending}
+			>
+				{pending ? "Signing in..." : "Sign in"}
+			</button>
+			{error && <p className="text-sm text-danger">{error}</p>}
 		</form>
 	);
 }

@@ -1,13 +1,5 @@
-import {
-	Box,
-	Flex,
-	Heading,
-	Stack,
-	StackSeparator,
-	Text,
-} from "@chakra-ui/react";
-import { RegisterForm } from "@/core/auth/components/register-form";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/src/lib/prisma";
+import { RegisterForm } from "../../../core/auth/components/register-form";
 
 export default async function Users() {
 	const users = await prisma.user.findMany({
@@ -16,48 +8,31 @@ export default async function Users() {
 	});
 
 	return (
-		<Stack gap="6" maxW="xl">
-			<Heading as="h1" size="2xl">
-				Register user
-			</Heading>
+		<section className="flex flex-col gap-6">
+			<h1 className="text-2xl font-semibold">Register user</h1>
 			<RegisterForm />
 
-			<Heading as="h2" size="xl">
-				Users ({users.length})
-			</Heading>
+			<h2 className="text-xl font-semibold">Users ({users.length})</h2>
 			{users.length === 0 ? (
-				<Text fontSize="sm" color="fg.muted">
-					No users yet.
-				</Text>
+				<p className="text-sm text-muted">No users yet.</p>
 			) : (
-				<Stack
-					gap="0"
-					borderWidth="1px"
-					rounded="md"
-					bg="bg.panel"
-					separator={<StackSeparator />}
-				>
+				<ul className="flex flex-col divide-y divide-line rounded-md border border-line bg-surface">
 					{users.map((user) => (
-						<Flex
+						<li
 							key={user.id}
-							align="center"
-							justify="space-between"
-							gap="4"
-							px="4"
-							py="3"
-							fontSize="sm"
+							className="flex items-center justify-between gap-4 px-4 py-3 text-sm"
 						>
-							<Box>
-								<Text fontWeight="medium">{user.name ?? "—"}</Text>
-								<Text color="fg.muted">{user.email}</Text>
-							</Box>
-							<Text color="fg.muted">
+							<div className="flex flex-col">
+								<span className="font-medium">{user.name ?? "—"}</span>
+								<span className="text-muted">{user.email}</span>
+							</div>
+							<span className="text-muted">
 								{user.createdAt.toLocaleDateString("en-GB")}
-							</Text>
-						</Flex>
+							</span>
+						</li>
 					))}
-				</Stack>
+				</ul>
 			)}
-		</Stack>
+		</section>
 	);
 }

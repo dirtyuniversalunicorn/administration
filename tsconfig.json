@@ -15,7 +15,7 @@
 		"incremental": true,
 		"types": ["./worker-configuration.d.ts", "node", "vinext/types"],
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

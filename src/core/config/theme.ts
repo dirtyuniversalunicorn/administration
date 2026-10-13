@@ -1,15 +1,26 @@
+import type { CSSProperties } from "react";
 import { appConfig, type ThemeColors } from "./appConfig";
 
+const kebab = (key: string) =>
+	key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+
 /**
- * Colors of the active theme. The THEME variable (per deployment) wins over
- * appConfig.theme.active; an unknown name falls back to the configured one.
- * Server-side only (reads process.env): the root layout passes the result to
- * the Chakra <Provider>, which turns it into the design system.
+ * CSS variables for the active theme, set on <html> in the root layout. The
+ * THEME variable (per deployment) wins over appConfig.theme.active; an unknown
+ * name falls back to the configured one. Tailwind picks the variables up via
+ * the @theme block in globals.css.
  */
-export function getThemeColors(): ThemeColors {
+export function getThemeStyle(): CSSProperties {
 	const { active, presets, overrides } = appConfig.theme;
-	return {
-		...(presets[process.env.THEME ?? ""] ?? presets[active] ?? presets.slate),
+	const requested = process.env.THEME;
+	const colors: ThemeColors = {
+		...(presets[requested ?? ""] ?? presets[active] ?? presets.slate),
 		...overrides,
 	};
+
+	const style: Record<string, string> = {};
+	for (const [key, value] of Object.entries(colors)) {
+		style[`--${kebab(key)}`] = value;
+	}
+	return style as CSSProperties;
 }

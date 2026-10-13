@@ -1,24 +1,25 @@
 "use client";
 
-import { Button } from "@chakra-ui/react";
-import { useState, useTransition } from "react";
-import { ConfirmModal } from "@/core/ui/confirm-modal";
+import { useActionState, useState } from "react";
+import { ConfirmModal } from "@/src/core/ui/confirm-modal";
 import { deleteItemAction } from "../actions/itemActions";
 
 export function DeleteItemButton({ id, label }: { id: string; label: string }) {
 	const [open, setOpen] = useState(false);
-	const [pending, startTransition] = useTransition();
+	const [, action, pending] = useActionState(async (_prev: null) => {
+		await deleteItemAction(id); // redirects back to the list when done
+		return null;
+	}, null);
 
 	return (
-		<>
-			<Button
-				size="xs"
-				variant="plain"
-				colorPalette="red"
+		<form action={action}>
+			<button
+				type="button"
+				className="text-danger hover:underline"
 				onClick={() => setOpen(true)}
 			>
 				Delete
-			</Button>
+			</button>
 			<ConfirmModal
 				open={open}
 				title="Delete item"
@@ -26,15 +27,11 @@ export function DeleteItemButton({ id, label }: { id: string; label: string }) {
 				pendingLabel="Deleting..."
 				pending={pending}
 				destructive
-				onConfirm={() =>
-					startTransition(async () => {
-						await deleteItemAction(id); // redirects back to the list when done
-					})
-				}
+				confirmType="submit"
 				onCancel={() => setOpen(false)}
 			>
 				Delete <strong>{label}</strong> permanently? This cannot be undone.
 			</ConfirmModal>
-		</>
+		</form>
 	);
 }

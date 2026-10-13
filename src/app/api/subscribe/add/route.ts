@@ -1,12 +1,11 @@
-// Anonymous visitors sign up here; the subscription stays PENDING until they
-
 import {
 	isSubscriptionEnabled,
 	readEmail,
 	requestSubscription,
 	subscriptionDisabledResponse,
-} from "@/core/subscribe/subscribe";
+} from "@/src/core/subscribe/subscribe";
 
+// Anonymous visitors sign up here; the subscription stays PENDING until they
 // click the link in the confirmation email (see ../confirm).
 export async function POST(request: Request) {
 	if (!isSubscriptionEnabled()) return subscriptionDisabledResponse();

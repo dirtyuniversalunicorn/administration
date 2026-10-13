@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { appConfig } from "@/core/config/appConfig";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { appConfig } from "@/src/core/config/appConfig";
+import { auth } from "@/src/lib/auth";
+import { prisma } from "@/src/lib/prisma";
 
 export type ItemFormState = { ok: boolean; message: string };
 

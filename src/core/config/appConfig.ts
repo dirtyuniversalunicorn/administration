@@ -1,4 +1,4 @@
-/** Every color the UI uses. Mapped to Chakra tokens in src/components/ui/system.ts. */
+/** Every color the UI uses. Pages use these through Tailwind classes like bg-primary. */
 export type ThemeColors = {
 	/** Page background and subtle fills (table header, inactive rows). */
 	background: string;
@@ -82,7 +82,7 @@ const routes = {
 	/** Public landing page with the login form. */
 	login: "/",
 	/** Where an authenticated user lands after login. */
-	dashboard: "/dashboard",
+	home: "/dashboard",
 	contact: "/dashboard/contact",
 	items: "/dashboard/items",
 	/** Detail page of one item (app/dashboard/items/[item]). */
@@ -181,7 +181,7 @@ export const appConfig = {
 	},
 
 	nav: [
-		{ label: "Dashboard", href: routes.dashboard },
+		{ label: "Dashboard", href: routes.home },
 		{ label: "Items", href: routes.items },
 		{ label: "Users", href: routes.users },
 		{ label: "Contact", href: routes.contact },

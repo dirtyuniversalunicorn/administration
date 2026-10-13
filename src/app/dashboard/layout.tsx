@@ -1,9 +1,8 @@
-import { Box, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { SignOutButton } from "@/core/auth/components/sign-out-button";
-import { appConfig } from "@/core/config/appConfig";
-import { auth } from "@/lib/auth";
+import { appConfig } from "@/src/core/config/appConfig";
+import { auth } from "@/src/lib/auth";
+import { SignOutButton } from "../../core/auth/components/sign-out-button";
 
 export default async function DashboardLayout({
 	children,
@@ -14,31 +13,21 @@ export default async function DashboardLayout({
 	if (!session) redirect(appConfig.routes.login);
 
 	return (
-		<Box minH="100vh">
-			<Flex
-				as="header"
-				align="center"
-				justify="space-between"
-				px="6"
-				py="3"
-				borderBottomWidth="1px"
-				bg="bg.panel"
-			>
-				<HStack as="nav" gap="5" fontSize="sm" fontWeight="medium">
+		<div className="min-h-screen bg-background text-foreground">
+			<header className="flex items-center justify-between border-b border-line bg-surface px-6 py-3">
+				<nav className="flex gap-4 text-sm font-medium">
 					{appConfig.nav.map((item) => (
-						<Link key={item.href} href={item.href} variant="plain">
+						<a key={item.href} href={item.href}>
 							{item.label}
-						</Link>
+						</a>
 					))}
-				</HStack>
-				<HStack gap="3" fontSize="sm">
-					<Text color="fg.muted">{session.user.email}</Text>
+				</nav>
+				<div className="flex items-center gap-3 text-sm">
+					<span className="text-muted">{session.user.email}</span>
 					<SignOutButton />
-				</HStack>
-			</Flex>
-			<Container as="main" maxW="5xl" px="6" py="10">
-				{children}
-			</Container>
-		</Box>
+				</div>
+			</header>
+			<main className="mx-auto max-w-2xl px-6 py-10">{children}</main>
+		</div>
 	);
 }

@@ -2,8 +2,8 @@ import {
 	confirmSubscription,
 	isSubscriptionEnabled,
 	subscriptionDisabledResponse,
-} from "@/core/subscribe/subscribe";
-import { isValidToken, resultRedirect } from "@/core/subscribe/tokens";
+} from "@/src/core/subscribe/subscribe";
+import { isValidToken, resultRedirect } from "@/src/core/subscribe/tokens";
 
 export const dynamic = "force-dynamic";
 

@@ -5,8 +5,8 @@ import {
 	getApiAccess,
 	isApiPath,
 	isProtectedPath,
-} from "./core/config/access";
-import { appConfig } from "./core/config/appConfig";
+} from "@/src/core/config/access";
+import { appConfig } from "@/src/core/config/appConfig";
 
 // Optimistic check (cookie presence only). Real session validation happens
 // server-side in src/app/dashboard/layout.tsx; protected API routes should
