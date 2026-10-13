@@ -180,11 +180,12 @@ export const appConfig = {
 		overrides: {} as Partial<ThemeColors>,
 	},
 
+	/** Sidebar entries. `icon` picks one of the icons in core/ui/dashboard-shell.tsx. */
 	nav: [
-		{ label: "Dashboard", href: routes.home },
-		{ label: "Items", href: routes.items },
-		{ label: "Users", href: routes.users },
-		{ label: "Contact", href: routes.contact },
+		{ label: "Dashboard", href: routes.home, icon: "dashboard" },
+		{ label: "Items", href: routes.items, icon: "items" },
+		{ label: "Users", href: routes.users, icon: "users" },
+		{ label: "Contact", href: routes.contact, icon: "contact" },
 	],
 } as const;
 

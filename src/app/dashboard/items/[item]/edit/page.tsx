@@ -14,7 +14,7 @@ export default async function EditItem({
 	if (!item) notFound();
 
 	return (
-		<section className="flex flex-col gap-6">
+		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
 			<a href={appConfig.routes.items} className="text-sm text-muted">
 				← All items
 			</a>

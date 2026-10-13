@@ -4,7 +4,7 @@ import { ItemForm } from "@/src/core/items/components/item-form";
 
 export default function NewItem() {
 	return (
-		<section className="flex flex-col gap-6">
+		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
 			<a href={appConfig.routes.items} className="text-sm text-muted">
 				← All items
 			</a>

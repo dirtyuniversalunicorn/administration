@@ -1,8 +1,9 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { appConfig } from "@/src/core/config/appConfig";
+import { DashboardShell } from "@/src/core/ui/dashboard-shell";
+import { SIDEBAR_COOKIE } from "@/src/core/ui/sidebar-cookie";
 import { auth } from "@/src/lib/auth";
-import { SignOutButton } from "../../core/auth/components/sign-out-button";
 
 export default async function DashboardLayout({
 	children,
@@ -12,22 +13,12 @@ export default async function DashboardLayout({
 	const session = await auth.api.getSession({ headers: await headers() });
 	if (!session) redirect(appConfig.routes.login);
 
+	// Read on the server so a collapsed sidebar doesn't flash open on page load.
+	const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "1";
+
 	return (
-		<div className="min-h-screen bg-background text-foreground">
-			<header className="flex items-center justify-between border-b border-line bg-surface px-6 py-3">
-				<nav className="flex gap-4 text-sm font-medium">
-					{appConfig.nav.map((item) => (
-						<a key={item.href} href={item.href}>
-							{item.label}
-						</a>
-					))}
-				</nav>
-				<div className="flex items-center gap-3 text-sm">
-					<span className="text-muted">{session.user.email}</span>
-					<SignOutButton />
-				</div>
-			</header>
-			<main className="mx-auto max-w-2xl px-6 py-10">{children}</main>
-		</div>
+		<DashboardShell email={session.user.email} defaultCollapsed={collapsed}>
+			{children}
+		</DashboardShell>
 	);
 }
