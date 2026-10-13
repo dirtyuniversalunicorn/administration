@@ -1,3 +1,17 @@
+const routes = {
+	/** Public landing page with the login form. */
+	login: "/",
+	/** Where an authenticated user lands after login. */
+	home: "/dashboard",
+	contact: "/dashboard/contact",
+	items: "/dashboard/items",
+	/** Detail page of one item (app/dashboard/items/[item]). */
+	item: (id: string) => `/dashboard/items/${encodeURIComponent(id)}`,
+	users: "/dashboard/users",
+	subscriptions: "/dashboard/subscriptions",
+	translations: "/dashboard/translations",
+};
+
 export const appConfig = {
 	site: {
 		name: "Administration",
@@ -5,13 +19,7 @@ export const appConfig = {
 		locale: "en",
 	},
 
-	routes: {
-		/** Public landing page with the login form. */
-		login: "/",
-		/** Where an authenticated user lands after login. */
-		home: "/dashboard",
-		users: "/dashboard/users",
-	},
+	routes,
 
 	auth: {
 		/**
@@ -79,8 +87,10 @@ export const appConfig = {
 	},
 
 	nav: [
-		{ label: "Dashboard", href: "/dashboard" },
-		{ label: "Users", href: "/dashboard/users" },
+		{ label: "Dashboard", href: routes.home },
+		{ label: "Items", href: routes.items },
+		{ label: "Users", href: routes.users },
+		{ label: "Contact", href: routes.contact },
 	],
 } as const;
 
