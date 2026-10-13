@@ -22,6 +22,9 @@
 		"enabled": true
 	},
 	"upload_source_maps": true,
+	"vars": {
+		"BETTER_AUTH_URL": "https://administration.jaroslavfilo95.workers.dev"
+	},
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
