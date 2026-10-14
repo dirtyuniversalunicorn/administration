@@ -73,6 +73,7 @@ To enforce it on every deploy, make the check part of the Cloudflare build comma
 `npm run check:hyperdrive && npm run build` (the build's API token must be allowed to read Hyperdrive
 configs; otherwise the check only warns, unless you pass `--strict`).
 
+
 If you later want caching for heavy, public, read-only traffic, create a second Hyperdrive config *with*
 caching and bind it under another name; keep admin pages and login on the uncached one.
 
