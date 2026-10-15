@@ -5,54 +5,32 @@ import { type ReactNode, useState } from "react";
 import { SignOutButton } from "@/src/core/auth/components/sign-out-button";
 import { appConfig } from "@/src/core/config/appConfig";
 import { SIDEBAR_COOKIE } from "./sidebar-cookie";
+import { Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Search, User } from "lucide-react";
+import Link from "vinext/shims/link";
 
 type NavIcon = (typeof appConfig.nav)[number]["icon"];
 
-/** 20px outline icon. Decorative: the link or button next to it carries the label. */
-function Icon({ children }: { children: ReactNode }) {
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			className="h-5 w-5 shrink-0"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-			{children}
-		</svg>
-	);
-}
-
 const icons: Record<NavIcon, ReactNode> = {
 	dashboard: (
-		<Icon>
-			<path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-			<path d="M9 22V12h6v10" />
-		</Icon>
+		<LayoutDashboardIcon />
 	),
 	items: (
-		<Icon>
-			<rect x="3" y="3" width="18" height="18" rx="2" />
-			<circle cx="9" cy="9" r="2" />
-			<path d="m21 15-5-5L5 21" />
-		</Icon>
+		<Group />
 	),
 	users: (
-		<Icon>
-			<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-			<circle cx="9" cy="7" r="4" />
-			<path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-			<path d="M16 3.13a4 4 0 0 1 0 7.75" />
-		</Icon>
+		<User />
 	),
 	contact: (
-		<Icon>
-			<rect x="2" y="4" width="20" height="16" rx="2" />
-			<path d="m22 7-10 6L2 7" />
-		</Icon>
+		<Contact />
+	),
+	translations: (
+		<Languages />
+	),
+	website: (
+		<Globe />
+	),
+	seo: (
+		<Search />
 	),
 };
 
@@ -95,9 +73,11 @@ export function DashboardShell({
 					}`}
 				>
 					{!collapsed && (
+						<Link href={appConfig.routes.home}>
 						<span className="truncate px-1 font-semibold">
 							{appConfig.site.name}
 						</span>
+						</Link>
 					)}
 					<button
 						type="button"
@@ -107,11 +87,7 @@ export function DashboardShell({
 						title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
 						className="rounded-md p-2 text-muted hover:bg-background hover:text-foreground"
 					>
-						<Icon>
-							<rect x="3" y="3" width="18" height="18" rx="2" />
-							<path d="M9 3v18" />
-							<path d={collapsed ? "m14 9 3 3-3 3" : "m16 9-3 3 3 3"} />
-						</Icon>
+						{collapsed ? <ListCollapseIcon /> : <ListTreeIcon />}
 					</button>
 				</div>
 

@@ -92,6 +92,8 @@ const routes = {
 	users: "/dashboard/users",
 	subscriptions: "/dashboard/subscriptions",
 	translations: "/dashboard/translations",
+	website: "/dashboard/website",
+	seo: "/dashboard/seo",
 };
 
 export const appConfig = {
@@ -186,6 +188,9 @@ export const appConfig = {
 		{ label: "Items", href: routes.items, icon: "items" },
 		{ label: "Users", href: routes.users, icon: "users" },
 		{ label: "Contact", href: routes.contact, icon: "contact" },
+		{ label: "Translations", href: routes.translations, icon: "translations" },
+		{ label: "Website", href: routes.website, icon: "website" },
+		{ label: "SEO", href: routes.seo, icon: "seo" },
 	],
 } as const;
 
