@@ -45,7 +45,11 @@ export async function createItemAction(
 
 	try {
 		await prisma.item.create({
-			data: { ...input, postedById: session.user.id },
+			data: {
+				...input,
+				postedById: session.user.id,
+				editedById: session.user.id,
+			},
 		});
 	} catch (error) {
 		console.error("createItemAction failed", error);
@@ -69,7 +73,10 @@ export async function updateItemAction(
 
 	try {
 		// editedAt is refreshed automatically (@updatedAt); postedBy stays as is.
-		await prisma.item.update({ where: { id }, data: input });
+		await prisma.item.update({
+			where: { id },
+			data: { ...input, editedById: session.user.id },
+		});
 	} catch (error) {
 		console.error("updateItemAction failed", error);
 		return { ok: false, message: "Failed to save. Does the item still exist?" };
@@ -105,7 +112,12 @@ export async function setItemStatusAction(
 
 	await prisma.item.updateMany({
 		where: { id },
-		data: { status, deactivatedAt: status === "INACTIVE" ? new Date() : null },
+		data: {
+			status,
+			deactivatedAt: status === "INACTIVE" ? new Date() : null,
+			// A status change also bumps editedAt, so record who did it.
+			editedById: session.user.id,
+		},
 	});
 	revalidatePath(appConfig.routes.items);
 	revalidatePath(appConfig.routes.item(id));

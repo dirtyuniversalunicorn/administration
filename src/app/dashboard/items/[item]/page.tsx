@@ -10,7 +10,10 @@ export default async function Item({
 	const { item: id } = await params;
 	const item = await prisma.item.findUnique({
 		where: { id },
-		include: { postedBy: { select: { name: true, email: true } } },
+		include: {
+			postedBy: { select: { name: true, email: true } },
+			editedBy: { select: { name: true, email: true } },
+		},
 	});
 	if (!item) notFound();
 
@@ -20,7 +23,10 @@ export default async function Item({
 		["Status", item.status === "ACTIVE" ? "Active" : "Inactive"],
 		["Posted by", item.postedBy.name ?? item.postedBy.email],
 		["Created", item.createdAt.toLocaleString("en-GB")],
-		["Edited", item.editedAt.toLocaleString("en-GB")],
+		[
+			"Last edited",
+			`${item.editedBy.name ?? item.editedBy.email} · ${item.editedAt.toLocaleString("en-GB")}`,
+		],
 	];
 
 	return (

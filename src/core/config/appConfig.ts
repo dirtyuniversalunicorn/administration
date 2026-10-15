@@ -84,6 +84,8 @@ const routes = {
 	/** Where an authenticated user lands after login. */
 	home: "/dashboard",
 	contact: "/dashboard/contact",
+	/** Add / edit form for the contact information (same page for both). */
+	contactEdit: "/dashboard/contact/edit",
 	items: "/dashboard/items",
 	/** Detail page of one item (app/dashboard/items/[item]). */
 	item: (id: string) => `/dashboard/items/${encodeURIComponent(id)}`,

@@ -31,7 +31,10 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  items         Item[]
+  items         Item[]    @relation("ItemPostedBy")
+  editedItems   Item[]    @relation("ItemEditedBy")
+  contact       Contact[] @relation("ContactPostedBy")
+  editedContact Contact[] @relation("ContactEditedBy")
 
   @@map("user")
 }
@@ -119,9 +122,12 @@ enum ItemStatus {
 model Item {
   id            String     @id @default(cuid())
   postedById    String
-  postedBy      User       @relation(fields: [postedById], references: [id])
+  postedBy      User       @relation("ItemPostedBy", fields: [postedById], references: [id])
   createdAt     DateTime   @default(now())
   editedAt      DateTime   @updatedAt
+  // Who made the last change (set on create, edit and status change).
+  editedById    String
+  editedBy      User       @relation("ItemEditedBy", fields: [editedById], references: [id])
   category      String
   imageUrl      String
   technique     String
@@ -133,4 +139,25 @@ model Item {
   @@index([category])
   @@index([createdAt])
   @@map("item")
+}
+
+model Contact {
+  id           String  @id @default(cuid())
+  email        String?
+  phone        String?
+  mobile       String?
+  address      String?
+  openingHours String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postedById String
+  postedBy   User   @relation("ContactPostedBy", fields: [postedById], references: [id])
+
+  // Who made the last change (set on create and on every edit).
+  editedById String
+  editedBy   User   @relation("ContactEditedBy", fields: [editedById], references: [id])
+
+  @@map("contact")
 }

@@ -27,7 +27,10 @@ export default async function Items({
 				? {}
 				: { status: filter.toUpperCase() as "ACTIVE" | "INACTIVE" },
 		orderBy: { createdAt: "desc" },
-		include: { postedBy: { select: { name: true, email: true } } },
+		include: {
+			postedBy: { select: { name: true, email: true } },
+			editedBy: { select: { name: true, email: true } },
+		},
 	});
 
 	return (
@@ -74,7 +77,7 @@ export default async function Items({
 							<th className={th}>Status</th>
 							<th className={th}>Posted by</th>
 							<th className={th}>Created</th>
-							<th className={th}>Edited</th>
+							<th className={th}>Last edit</th>
 							<th className={th}>
 								<span className="sr-only">Actions</span>
 							</th>
@@ -120,8 +123,14 @@ export default async function Items({
 									<td className={td}>
 										{item.createdAt.toLocaleDateString("en-GB")}
 									</td>
-									<td className={td}>
+									<td
+										className={td}
+										title={item.editedAt.toLocaleString("en-GB")}
+									>
 										{item.editedAt.toLocaleDateString("en-GB")}
+										<span className="block text-xs text-muted">
+											by {item.editedBy.name ?? item.editedBy.email}
+										</span>
 									</td>
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
