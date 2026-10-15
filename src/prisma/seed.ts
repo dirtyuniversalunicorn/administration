@@ -28,6 +28,27 @@ const items = [
 	["print", "screen print"],
 ] as const;
 
+const blogs = [
+	{
+		title: "Welcome to our new website",
+		excerpt: "A short tour of what is new and where to find things.",
+		content:
+			"We have rebuilt the site from the ground up.\n\nThe new layout is faster, easier to read on a phone, and every page can be updated by our team without a developer.\n\nOver the coming weeks we will share more about the work behind the scenes. Stay tuned.",
+	},
+	{
+		title: "Behind the scenes: our process",
+		excerpt: "How a piece goes from first sketch to the finished work.",
+		content:
+			"Every piece starts as a rough sketch.\n\nFrom there we choose the materials, test the technique on a small sample, and only then begin the final work. It is slower than cutting corners, but the result is worth it.\n\nWe will post photos of each step in the next entries.",
+	},
+	{
+		title: "Draft: autumn exhibition announcement",
+		excerpt: "Not published yet.",
+		content:
+			"This is a draft that is hidden from the public site.\n\nOnce the dates are confirmed, set it to Active to publish it.",
+	},
+];
+
 async function seedAdmin() {
 	const existing = await prisma.user.findUnique({
 		where: { email: ADMIN_EMAIL },
@@ -92,6 +113,28 @@ async function main() {
 	}
 
 	console.log(`Seeded ${items.length} items.`);
+
+	for (const [i, blog] of blogs.entries()) {
+		const id = `seed-blog-${i + 1}`;
+		await prisma.blog.upsert({
+			where: { id },
+			create: {
+				id,
+				...blog,
+				imageUrl: `https://picsum.photos/seed/${id}/1200/600`,
+				postedById: admin.id,
+				editedById: admin.id,
+				// The last post starts INACTIVE to demo the hidden state.
+				...(i === blogs.length - 1
+					? { status: "INACTIVE" as const, deactivatedAt: new Date() }
+					: {}),
+			},
+			// Create-only: re-running the seed never overwrites a post you edited.
+			update: {},
+		});
+	}
+
+	console.log(`Seeded ${blogs.length} blogs.`);
 }
 
 main()

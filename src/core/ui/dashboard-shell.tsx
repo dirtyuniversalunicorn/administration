@@ -5,7 +5,7 @@ import { type ReactNode, useState } from "react";
 import { SignOutButton } from "@/src/core/auth/components/sign-out-button";
 import { appConfig } from "@/src/core/config/appConfig";
 import { SIDEBAR_COOKIE } from "./sidebar-cookie";
-import { Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Search, User } from "lucide-react";
+import { Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Newspaper, Search, User } from "lucide-react";
 import Link from "vinext/shims/link";
 
 type NavIcon = (typeof appConfig.nav)[number]["icon"];
@@ -16,6 +16,9 @@ const icons: Record<NavIcon, ReactNode> = {
 	),
 	items: (
 		<Group />
+	),
+	blogs: (
+		<Newspaper />
 	),
 	users: (
 		<User />

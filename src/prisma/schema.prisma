@@ -35,6 +35,8 @@ model User {
   editedItems   Item[]    @relation("ItemEditedBy")
   contact       Contact[] @relation("ContactPostedBy")
   editedContact Contact[] @relation("ContactEditedBy")
+  blogs         Blog[]    @relation("BlogPostedBy")
+  editedBlogs   Blog[]    @relation("BlogEditedBy")
 
   @@map("user")
 }
@@ -160,4 +162,34 @@ model Contact {
   editedBy   User   @relation("ContactEditedBy", fields: [editedById], references: [id])
 
   @@map("contact")
+}
+
+enum BlogStatus {
+  ACTIVE // shown in the client-facing app
+  INACTIVE // hidden from the client-facing app, kept in the database
+}
+
+model Blog {
+  id            String     @id @default(cuid())
+  title         String
+  // Short summary shown in lists. Optional.
+  excerpt       String?
+  // The post itself, plain text (line breaks are kept).
+  content       String
+  // Cover image link. Optional.
+  imageUrl      String?
+  status        BlogStatus @default(ACTIVE)
+  deactivatedAt DateTime?
+
+  createdAt  DateTime @default(now())
+  editedAt   DateTime @updatedAt
+  postedById String
+  postedBy   User     @relation("BlogPostedBy", fields: [postedById], references: [id])
+  // Who made the last change (set on create, edit and status change).
+  editedById String
+  editedBy   User     @relation("BlogEditedBy", fields: [editedById], references: [id])
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("blog")
 }

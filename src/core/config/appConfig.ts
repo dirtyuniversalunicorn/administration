@@ -91,6 +91,11 @@ const routes = {
 	item: (id: string) => `/dashboard/items/${encodeURIComponent(id)}`,
 	itemNew: "/dashboard/items/new",
 	itemEdit: (id: string) => `/dashboard/items/${encodeURIComponent(id)}/edit`,
+	blogs: "/dashboard/blogs",
+	/** Detail page of one blog (app/dashboard/blogs/[blog]). */
+	blog: (id: string) => `/dashboard/blogs/${encodeURIComponent(id)}`,
+	blogNew: "/dashboard/blogs/new",
+	blogEdit: (id: string) => `/dashboard/blogs/${encodeURIComponent(id)}/edit`,
 	users: "/dashboard/users",
 	subscriptions: "/dashboard/subscriptions",
 	translations: "/dashboard/translations",
@@ -188,6 +193,7 @@ export const appConfig = {
 	nav: [
 		{ label: "Dashboard", href: routes.home, icon: "dashboard" },
 		{ label: "Items", href: routes.items, icon: "items" },
+		{ label: "Blogs", href: routes.blogs, icon: "blogs" },
 		{ label: "Users", href: routes.users, icon: "users" },
 		{ label: "Contact", href: routes.contact, icon: "contact" },
 		{ label: "Translations", href: routes.translations, icon: "translations" },
