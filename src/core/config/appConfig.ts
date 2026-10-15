@@ -1,3 +1,5 @@
+import type { ApiRule, FeatureId } from "./feature";
+
 /** Every color the UI uses. Pages use these through Tailwind classes like bg-primary. */
 export type ThemeColors = {
 	/** Page background and subtle fills (table header, inactive rows). */
@@ -78,29 +80,27 @@ const themePresets = {
 	},
 } satisfies Record<string, ThemeColors>;
 
+/** Core routes. Each feature owns its own routes in src/features/<name>/config.ts. */
 const routes = {
 	/** Public landing page with the login form. */
 	login: "/",
 	/** Where an authenticated user lands after login. */
 	home: "/dashboard",
-	contact: "/dashboard/contact",
-	/** Add / edit form for the contact information (same page for both). */
-	contactEdit: "/dashboard/contact/edit",
-	items: "/dashboard/items",
-	/** Detail page of one item (app/dashboard/items/[item]). */
-	item: (id: string) => `/dashboard/items/${encodeURIComponent(id)}`,
-	itemNew: "/dashboard/items/new",
-	itemEdit: (id: string) => `/dashboard/items/${encodeURIComponent(id)}/edit`,
-	blogs: "/dashboard/blogs",
-	/** Detail page of one blog (app/dashboard/blogs/[blog]). */
-	blog: (id: string) => `/dashboard/blogs/${encodeURIComponent(id)}`,
-	blogNew: "/dashboard/blogs/new",
-	blogEdit: (id: string) => `/dashboard/blogs/${encodeURIComponent(id)}/edit`,
+	/** User management (register form + list). */
 	users: "/dashboard/users",
-	subscriptions: "/dashboard/subscriptions",
-	translations: "/dashboard/translations",
-	website: "/dashboard/website",
-	seo: "/dashboard/seo",
+	/** Explains that a feature is turned off (the proxy rewrites its pages here). */
+	featureDisabled: (id: string) =>
+		`/dashboard/feature-disabled/${encodeURIComponent(id)}`,
+};
+
+const featureFlags: Record<FeatureId, boolean> = {
+	items: true,
+	blogs: true,
+	contact: true,
+	subscribe: true,
+	translations: true,
+	website: true,
+	seo: true,
 };
 
 export const appConfig = {
@@ -131,13 +131,9 @@ export const appConfig = {
 		 */
 		public: [
 			{ path: "/api/auth/*", methods: ["GET", "POST"], cors: false }, // Better Auth does its own checks
-			{ path: "/api/subscribe/add", methods: ["POST"], cors: true },
-			// Opened from links inside emails (plain browser navigation, no CORS needed).
-			{ path: "/api/subscribe/confirm", methods: ["GET"], cors: false },
-			{ path: "/api/subscribe/delete", methods: ["GET"], cors: false }, // unsubscribe
+			// No feature owns this stub yet. Features add their own entries in their config.
 			{ path: "/api/collection/get", methods: ["GET"], cors: true },
-			{ path: "/api/item/get", methods: ["GET"], cors: true },
-		] as { path: string; methods: string[]; cors: boolean }[],
+		] as ApiRule[],
 
 		/** Always rejected (403), even with a session. Wins over `public`. */
 		blocked: [] as string[],
@@ -150,31 +146,9 @@ export const appConfig = {
 		},
 	},
 
-	subscription: {
-		/**
-		 * Feature flag. false = subscriptions are off: every /api/subscribe/* route
-		 * answers 404, no subscription code runs and no email is sent.
-		 * (`as boolean` keeps TypeScript from narrowing the flag to the literal `false`.)
-		 */
-		isEnabled: false as boolean,
-		/** API path prefix owned by this feature; hidden entirely while disabled. */
-		apiPrefix: "/api/subscribe",
-		/**
-		 * Client-facing app. After a visitor clicks a link in an email they are sent
-		 * to `${clientAppUrl}${resultPath}?status=confirmed|unsubscribed|invalid`.
-		 * Override per environment with the CLIENT_APP_URL variable.
-		 */
-		clientAppUrl: "http://localhost:3001",
-		resultPath: "/subscription",
-		confirmTtlHours: 48,
-		/** Re-submitting a PENDING email within this window does not send another mail. */
-		resendCooldownSeconds: 60,
-	},
-
 	email: {
 		/** Must be an address on a domain verified with the email provider. */
 		from: "Administration <no-reply@example.com>",
-		confirmSubject: "Please confirm your subscription",
 	},
 
 	theme: {
@@ -189,17 +163,15 @@ export const appConfig = {
 		overrides: {} as Partial<ThemeColors>,
 	},
 
-	/** Sidebar entries. `icon` picks one of the icons in core/ui/dashboard-shell.tsx. */
-	nav: [
-		{ label: "Dashboard", href: routes.home, icon: "dashboard" },
-		{ label: "Items", href: routes.items, icon: "items" },
-		{ label: "Blogs", href: routes.blogs, icon: "blogs" },
-		{ label: "Users", href: routes.users, icon: "users" },
-		{ label: "Contact", href: routes.contact, icon: "contact" },
-		{ label: "Translations", href: routes.translations, icon: "translations" },
-		{ label: "Website", href: routes.website, icon: "website" },
-		{ label: "SEO", href: routes.seo, icon: "seo" },
-	],
+	/**
+	 * Feature flags. false = the feature is off everywhere: no sidebar entry, its
+	 * pages and API routes answer 404, and its code refuses to run.
+	 */
+	features: featureFlags,
 } as const;
 
 export type AppConfig = typeof appConfig;
+
+export function isFeatureEnabled(id: FeatureId): boolean {
+	return appConfig.features[id];
+}

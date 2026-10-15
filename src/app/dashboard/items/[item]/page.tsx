@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
 import { prisma } from "@/src/lib/prisma";
+import { itemsFeature } from "@/src/features/items/config";
 
 export default async function Item({
 	params,
@@ -31,7 +31,7 @@ export default async function Item({
 
 	return (
 		<section className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-muted">
+			<a href={itemsFeature.routes.index} className="text-sm text-muted">
 				← All items
 			</a>
 			<img

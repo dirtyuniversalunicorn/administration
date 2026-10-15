@@ -1,12 +1,8 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
-import {
-	corsHeaders,
-	getApiAccess,
-	isApiPath,
-	isProtectedPath,
-} from "@/src/core/config/access";
+import { isApiPath } from "@/src/core/config/access";
 import { appConfig } from "@/src/core/config/appConfig";
+import { accessRules } from "@/src/features/registry";
 
 // Optimistic check (cookie presence only). Real session validation happens
 // server-side in src/app/dashboard/layout.tsx; protected API routes should
@@ -16,7 +12,7 @@ export function proxy(request: NextRequest) {
 
 	if (isApiPath(pathname)) {
 		const origin = request.headers.get("origin");
-		const access = getApiAccess(pathname, request.method);
+		const access = accessRules.apiAccess(pathname, request.method);
 
 		if (access.kind === "disabled") {
 			return NextResponse.json(
@@ -37,12 +33,14 @@ export function proxy(request: NextRequest) {
 			if (request.method === "OPTIONS") {
 				return new NextResponse(null, {
 					status: 204,
-					headers: access.cors ? corsHeaders(origin, true) : {},
+					headers: access.cors ? accessRules.corsHeaders(origin, true) : {},
 				});
 			}
 			const response = NextResponse.next();
 			if (access.cors) {
-				for (const [k, v] of Object.entries(corsHeaders(origin, false)))
+				for (const [k, v] of Object.entries(
+					accessRules.corsHeaders(origin, false),
+				))
 					response.headers.set(k, v);
 			}
 			return response;
@@ -54,14 +52,27 @@ export function proxy(request: NextRequest) {
 		return NextResponse.next();
 	}
 
-	if (isProtectedPath(pathname) && !getSessionCookie(request)) {
+	// Dashboard pages need a login first, so logged-out visitors never learn
+	// which features exist or are switched off.
+	if (accessRules.isProtectedPath(pathname) && !getSessionCookie(request)) {
 		return NextResponse.redirect(new URL(appConfig.routes.login, request.url));
+	}
+
+	// A disabled feature's pages don't exist (404 status). Logged-in users get a
+	// page that explains it instead of a bare "not found".
+	const disabledFeature = accessRules.disabledPageFeature(pathname);
+	if (disabledFeature) {
+		return NextResponse.rewrite(
+			new URL(appConfig.routes.featureDisabled(disabledFeature), request.url),
+			{ status: 404 },
+		);
 	}
 	return NextResponse.next();
 }
 
 // Matcher must be a static literal, so it stays broad (everything except static
-// assets); which paths are protected or public is decided in appConfig.
+// assets); which paths are protected, public or disabled is decided by the
+// access rules that src/features/registry.ts builds from appConfig and the features.
 export const config = {
 	matcher: ["/((?!_next/|.*\\..*).*)"],
 };

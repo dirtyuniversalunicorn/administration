@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { appConfig } from "@/src/core/config/appConfig";
 import { DashboardShell } from "@/src/core/ui/dashboard-shell";
 import { SIDEBAR_COOKIE } from "@/src/core/ui/sidebar-cookie";
+import { nav } from "@/src/features/registry";
 import { auth } from "@/src/lib/auth";
 
 export default async function DashboardLayout({
@@ -17,7 +18,11 @@ export default async function DashboardLayout({
 	const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "1";
 
 	return (
-		<DashboardShell email={session.user.email} defaultCollapsed={collapsed}>
+		<DashboardShell
+			email={session.user.email}
+			nav={nav}
+			defaultCollapsed={collapsed}
+		>
 			{children}
 		</DashboardShell>
 	);

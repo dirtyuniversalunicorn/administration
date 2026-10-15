@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
 import { auth } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
+import { blogsFeature } from "@/src/features/blogs/config";
 
 export type BlogValues = {
 	title: string;
@@ -96,8 +96,8 @@ export async function createBlogAction(
 		console.error("createBlogAction failed", error);
 		return { ok: false, message: "Failed to create the blog.", values };
 	}
-	revalidatePath(appConfig.routes.blogs);
-	redirect(appConfig.routes.blogs);
+	revalidatePath(blogsFeature.routes.index);
+	redirect(blogsFeature.routes.index);
 }
 
 /** Bind the id in the page: `updateBlogAction.bind(null, blog.id)`. */
@@ -127,9 +127,9 @@ export async function updateBlogAction(
 			values,
 		};
 	}
-	revalidatePath(appConfig.routes.blogs);
-	revalidatePath(appConfig.routes.blog(id));
-	redirect(appConfig.routes.blog(id));
+	revalidatePath(blogsFeature.routes.index);
+	revalidatePath(blogsFeature.routes.detail(id));
+	redirect(blogsFeature.routes.detail(id));
 }
 
 /** Bind the id in the page: `deleteBlogAction.bind(null, blog.id)`. */
@@ -139,9 +139,9 @@ export async function deleteBlogAction(id: string): Promise<void> {
 
 	// deleteMany: deleting an already-removed blog is not an error.
 	await prisma.blog.deleteMany({ where: { id } });
-	revalidatePath(appConfig.routes.blogs);
-	revalidatePath(appConfig.routes.blog(id));
-	redirect(appConfig.routes.blogs);
+	revalidatePath(blogsFeature.routes.index);
+	revalidatePath(blogsFeature.routes.detail(id));
+	redirect(blogsFeature.routes.index);
 }
 
 /**
@@ -164,6 +164,6 @@ export async function setBlogStatusAction(
 			editedById: session.user.id,
 		},
 	});
-	revalidatePath(appConfig.routes.blogs);
-	revalidatePath(appConfig.routes.blog(id));
+	revalidatePath(blogsFeature.routes.index);
+	revalidatePath(blogsFeature.routes.detail(id));
 }

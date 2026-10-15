@@ -1,2 +1,0 @@
-// subscription form
-// frontend component

@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
 import { auth } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
+import { itemsFeature } from "@/src/features/items/config";
 
 export type ItemFormState = { ok: boolean; message: string };
 
@@ -55,8 +55,8 @@ export async function createItemAction(
 		console.error("createItemAction failed", error);
 		return { ok: false, message: "Failed to create the item." };
 	}
-	revalidatePath(appConfig.routes.items);
-	redirect(appConfig.routes.items);
+	revalidatePath(itemsFeature.routes.index);
+	redirect(itemsFeature.routes.index);
 }
 
 /** Bind the id in the page: `updateItemAction.bind(null, item.id)`. */
@@ -81,9 +81,9 @@ export async function updateItemAction(
 		console.error("updateItemAction failed", error);
 		return { ok: false, message: "Failed to save. Does the item still exist?" };
 	}
-	revalidatePath(appConfig.routes.items);
-	revalidatePath(appConfig.routes.item(id));
-	redirect(appConfig.routes.items);
+	revalidatePath(itemsFeature.routes.index);
+	revalidatePath(itemsFeature.routes.detail(id));
+	redirect(itemsFeature.routes.index);
 }
 
 /** Bind the id in the component: `deleteItemAction.bind(null, id)`. */
@@ -93,9 +93,9 @@ export async function deleteItemAction(id: string): Promise<void> {
 
 	// deleteMany: deleting an already-removed item is not an error.
 	await prisma.item.deleteMany({ where: { id } });
-	revalidatePath(appConfig.routes.items);
-	revalidatePath(appConfig.routes.item(id));
-	redirect(appConfig.routes.items);
+	revalidatePath(itemsFeature.routes.index);
+	revalidatePath(itemsFeature.routes.detail(id));
+	redirect(itemsFeature.routes.index);
 }
 
 /**
@@ -119,6 +119,6 @@ export async function setItemStatusAction(
 			editedById: session.user.id,
 		},
 	});
-	revalidatePath(appConfig.routes.items);
-	revalidatePath(appConfig.routes.item(id));
+	revalidatePath(itemsFeature.routes.index);
+	revalidatePath(itemsFeature.routes.detail(id));
 }

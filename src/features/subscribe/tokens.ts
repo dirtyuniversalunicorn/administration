@@ -1,4 +1,4 @@
-import { appConfig } from "@/src/core/config/appConfig";
+import { subscribeFeature } from "./config";
 
 /** 256-bit random token, hex encoded. Must be called inside a request (Workers). */
 export function randomToken(): string {
@@ -27,10 +27,10 @@ export function resultRedirect(
 	status: "confirmed" | "unsubscribed" | "invalid",
 ): Response {
 	const base = (
-		process.env.CLIENT_APP_URL ?? appConfig.subscription.clientAppUrl
+		process.env.CLIENT_APP_URL ?? subscribeFeature.settings.clientAppUrl
 	).replace(/\/+$/, "");
 	return Response.redirect(
-		`${base}${appConfig.subscription.resultPath}?status=${status}`,
+		`${base}${subscribeFeature.settings.resultPath}?status=${status}`,
 		302,
 	);
 }

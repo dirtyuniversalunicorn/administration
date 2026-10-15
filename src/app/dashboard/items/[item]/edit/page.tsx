@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
-import { updateItemAction } from "@/src/core/items/actions/itemActions";
-import { ItemForm } from "@/src/core/items/components/item-form";
+import { updateItemAction } from "@/src/features/items/actions/itemActions";
+import { ItemForm } from "@/src/features/items/components/item-form";
 import { prisma } from "@/src/lib/prisma";
+import { itemsFeature } from "@/src/features/items/config";
 
 export default async function EditItem({
 	params,
@@ -15,7 +15,7 @@ export default async function EditItem({
 
 	return (
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-muted">
+			<a href={itemsFeature.routes.index} className="text-sm text-muted">
 				← All items
 			</a>
 			<h1 className="text-2xl font-semibold">Edit item</h1>

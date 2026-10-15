@@ -1,5 +1,5 @@
-import { appConfig } from "@/src/core/config/appConfig";
-import { getContact } from "@/src/core/contact/queries";
+import { getContact } from "@/src/features/contact/queries";
+import { contactFeature } from "@/src/features/contact/config";
 
 export default async function Contact() {
 	const contact = await getContact();
@@ -20,7 +20,7 @@ export default async function Contact() {
 				<h1 className="text-2xl font-semibold">Contact</h1>
 				{contact && (
 					<a
-						href={appConfig.routes.contactEdit}
+						href={contactFeature.routes.edit}
 						className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
 					>
 						Edit contact information
@@ -55,7 +55,7 @@ export default async function Contact() {
 						be available to show on your site.
 					</p>
 					<a
-						href={appConfig.routes.contactEdit}
+						href={contactFeature.routes.edit}
 						className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
 					>
 						Add contact information

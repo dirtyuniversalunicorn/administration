@@ -1,11 +1,11 @@
-import { appConfig } from "@/src/core/config/appConfig";
-import { createItemAction } from "@/src/core/items/actions/itemActions";
-import { ItemForm } from "@/src/core/items/components/item-form";
+import { createItemAction } from "@/src/features/items/actions/itemActions";
+import { ItemForm } from "@/src/features/items/components/item-form";
+import { itemsFeature } from "@/src/features/items/config";
 
 export default function NewItem() {
 	return (
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
-			<a href={appConfig.routes.items} className="text-sm text-muted">
+			<a href={itemsFeature.routes.index} className="text-sm text-muted">
 				← All items
 			</a>
 			<h1 className="text-2xl font-semibold">Add item</h1>

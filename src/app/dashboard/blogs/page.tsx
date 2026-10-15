@@ -1,10 +1,10 @@
 import {
 	deleteBlogAction,
 	setBlogStatusAction,
-} from "@/src/core/blogs/actions/blogActions";
-import { appConfig } from "@/src/core/config/appConfig";
+} from "@/src/features/blogs/actions/blogActions";
 import { DeleteButton } from "@/src/core/ui/delete-button";
 import { prisma } from "@/src/lib/prisma";
+import { blogsFeature } from "@/src/features/blogs/config";
 
 const th = "px-3 py-2 text-left font-medium text-muted";
 const td = "px-3 py-2";
@@ -40,7 +40,7 @@ export default async function Blogs({
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Blogs ({blogs.length})</h1>
 				<a
-					href={appConfig.routes.blogNew}
+					href={blogsFeature.routes.new}
 					className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
 				>
 					Add blog
@@ -53,8 +53,8 @@ export default async function Blogs({
 						key={f.key}
 						href={
 							f.key === "all"
-								? appConfig.routes.blogs
-								: `${appConfig.routes.blogs}?status=${f.key}`
+								? blogsFeature.routes.index
+								: `${blogsFeature.routes.index}?status=${f.key}`
 						}
 						className={`rounded-full border px-3 py-1 ${
 							filter === f.key
@@ -97,7 +97,7 @@ export default async function Blogs({
 								>
 									<td className={`${td} max-w-xs`}>
 										<a
-											href={appConfig.routes.blog(blog.id)}
+											href={blogsFeature.routes.detail(blog.id)}
 											className="font-medium hover:underline"
 										>
 											{blog.title}
@@ -137,7 +137,7 @@ export default async function Blogs({
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
 											<a
-												href={appConfig.routes.blogEdit(blog.id)}
+												href={blogsFeature.routes.edit(blog.id)}
 												className="text-foreground hover:underline"
 											>
 												Edit

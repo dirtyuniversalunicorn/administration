@@ -4,11 +4,10 @@ import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
 import { SignOutButton } from "@/src/core/auth/components/sign-out-button";
 import { appConfig } from "@/src/core/config/appConfig";
+import type { NavEntry, NavIcon } from "@/src/core/config/feature";
 import { SIDEBAR_COOKIE } from "./sidebar-cookie";
-import { Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Newspaper, Search, User } from "lucide-react";
+import { BellRing, Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Newspaper, Search, User } from "lucide-react";
 import Link from "vinext/shims/link";
-
-type NavIcon = (typeof appConfig.nav)[number]["icon"];
 
 const icons: Record<NavIcon, ReactNode> = {
 	dashboard: (
@@ -32,6 +31,9 @@ const icons: Record<NavIcon, ReactNode> = {
 	website: (
 		<Globe />
 	),
+	subscriptions: (
+		<BellRing />
+	),
 	seo: (
 		<Search />
 	),
@@ -46,10 +48,13 @@ function isActive(pathname: string, href: string) {
 /** Collapsible left sidebar (navigation, user, sign out) and the centered content area. */
 export function DashboardShell({
 	email,
+	nav,
 	defaultCollapsed,
 	children,
 }: {
 	email: string;
+	/** Sidebar entries, already filtered by the feature flags (see features/registry.ts). */
+	nav: NavEntry[];
 	defaultCollapsed: boolean;
 	children: ReactNode;
 }) {
@@ -98,7 +103,7 @@ export function DashboardShell({
 					aria-label="Main"
 					className="flex flex-1 flex-col gap-1 overflow-y-auto p-2"
 				>
-					{appConfig.nav.map((item) => {
+					{nav.map((item) => {
 						const active = isActive(pathname, item.href);
 						return (
 							<a

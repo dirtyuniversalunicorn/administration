@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { appConfig } from "@/src/core/config/appConfig";
 import { auth } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
+import { contactFeature } from "@/src/features/contact/config";
 
 export type ContactValues = {
 	email: string;
@@ -124,6 +124,6 @@ export async function saveContactAction(
 			values,
 		};
 	}
-	revalidatePath(appConfig.routes.contact);
-	redirect(appConfig.routes.contact);
+	revalidatePath(contactFeature.routes.index);
+	redirect(contactFeature.routes.index);
 }

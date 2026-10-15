@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import {
 	deleteBlogAction,
 	setBlogStatusAction,
-} from "@/src/core/blogs/actions/blogActions";
-import { appConfig } from "@/src/core/config/appConfig";
+} from "@/src/features/blogs/actions/blogActions";
 import { DeleteButton } from "@/src/core/ui/delete-button";
 import { prisma } from "@/src/lib/prisma";
+import { blogsFeature } from "@/src/features/blogs/config";
 
 const button =
 	"rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium hover:bg-background";
@@ -29,7 +29,7 @@ export default async function Blog({
 
 	return (
 		<article className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-			<a href={appConfig.routes.blogs} className="text-sm text-muted">
+			<a href={blogsFeature.routes.index} className="text-sm text-muted">
 				← All blogs
 			</a>
 
@@ -46,7 +46,7 @@ export default async function Blog({
 				</div>
 				{blog.excerpt && <p className="text-muted">{blog.excerpt}</p>}
 				<div className="flex flex-wrap items-center gap-2">
-					<a href={appConfig.routes.blogEdit(blog.id)} className={button}>
+					<a href={blogsFeature.routes.edit(blog.id)} className={button}>
 						Edit
 					</a>
 					<form

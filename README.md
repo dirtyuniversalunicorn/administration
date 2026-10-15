@@ -95,15 +95,46 @@ caching and bind it under another name; keep admin pages and login on the uncach
 
 ## Configuration
 
-Almost everything is in `src/core/config/appConfig.ts`:
+### Code layout
 
-- `routes`, `nav`: page paths and the top navigation.
+- `src/core`: what every feature needs (auth, config, UI shell and primitives, later i18n). **Core never
+  imports from `src/features`.**
+- `src/features/<name>`: one feature each (actions, components, queries and its own `config.ts`).
+  A feature may import core. Features should not import each other.
+- `src/app`: thin Next.js route files that wire the two together.
+
+### Central config: `src/core/config/appConfig.ts`
+
+- `features`: an on/off flag per feature. `false` switches the feature off everywhere: its sidebar entry
+  disappears, its API routes answer 404, and its code refuses to run. Its dashboard pages answer 404 too,
+  but signed-in users see a short notice ("The X feature is not enabled") instead of a bare
+  "not found"; logged-out visitors are sent to the login as usual.
+- `routes`: only the core routes (login, home, users). Each feature owns its own routes.
 - `auth.protectedPaths`: page prefixes that require a login.
 - `api.public` / `api.blocked` / `api.cors`: which `/api` paths are open to anonymous visitors
-  (everything else needs a session).
-- `subscription.isEnabled`: feature flag; off means every `/api/subscribe/*` route answers 404.
+  (everything else needs a session). Features add their own public entries (see below).
 - `theme`: color presets (`active`, `presets`, `overrides`). Set the `THEME` variable per deployment to
   switch without code changes.
+
+### Per-feature config: `src/features/<name>/config.ts`
+
+Each feature describes itself with `defineFeature()`: its `routes`, sidebar entry (`nav`), page and API
+prefixes (`pagePrefix`, `apiPrefix`, used to switch it off), anonymous API entries (`publicApi`) and its
+own `settings` (e.g. the subscription link settings). Keep these files free of server-only imports
+(prisma, auth): the proxy and the sidebar import them.
+
+`src/features/registry.ts` is the **only** file that lists all features. It combines their configs with
+the flags and hands core plain data (sidebar entries, access rules), which is how core stays independent
+of features.
+
+### Adding a feature
+
+1. Add its id to `FeatureId` in `src/core/config/feature.ts` and a flag in `appConfig.features`
+   (forgetting the flag is a compile error).
+2. Create `src/features/<id>/config.ts` with `defineFeature({ ... })`.
+3. List it in `src/features/registry.ts` (and in its `sidebar` array if it has a sidebar entry; a new
+   sidebar icon also needs adding to `NavIcon` and the icon map in `core/ui/dashboard-shell.tsx`).
+4. Build its pages under `src/app/dashboard/<id>` and its logic under `src/features/<id>`.
 
 ## Cloudflare Workers gotchas
 

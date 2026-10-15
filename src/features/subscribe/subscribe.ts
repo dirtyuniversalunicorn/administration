@@ -1,10 +1,11 @@
-import { appConfig } from "@/src/core/config/appConfig";
-import { sendEmail } from "@/src/core/email/sendEmail";
+import { isFeatureEnabled } from "@/src/core/config/appConfig";
+import { sendEmail } from "@/src/features/email/sendEmail";
 import { prisma } from "@/src/lib/prisma";
+import { subscribeFeature } from "./config";
 import { confirmUrl, randomToken } from "./tokens";
 
-/** Feature flag (appConfig.subscription.isEnabled). */
-export const isSubscriptionEnabled = () => appConfig.subscription.isEnabled;
+/** Feature flag (appConfig.features.subscribe). */
+export const isSubscriptionEnabled = () => isFeatureEnabled("subscribe");
 
 /** Defense in depth: even if a route forgets the check, nothing runs while disabled. */
 function assertEnabled() {
@@ -39,7 +40,7 @@ export async function requestSubscription(email: string): Promise<void> {
 	if (existing?.status === "ACTIVE") return;
 
 	const now = new Date();
-	const { resendCooldownSeconds, confirmTtlHours } = appConfig.subscription;
+	const { resendCooldownSeconds, confirmTtlHours } = subscribeFeature.settings;
 	if (
 		existing?.status === "PENDING" &&
 		existing.confirmSentAt &&
@@ -67,7 +68,7 @@ export async function requestSubscription(email: string): Promise<void> {
 	const link = confirmUrl(confirmToken);
 	await sendEmail({
 		to: email,
-		subject: appConfig.email.confirmSubject,
+		subject: subscribeFeature.settings.confirmSubject,
 		text: `Confirm your subscription by opening this link (valid ${confirmTtlHours} hours):\n${link}\n\nIf you did not ask for this, ignore this email.`,
 		html: `<p>Confirm your subscription (link valid ${confirmTtlHours} hours):</p><p><a href="${link}">Confirm subscription</a></p><p>If you did not ask for this, ignore this email.</p>`,
 	});

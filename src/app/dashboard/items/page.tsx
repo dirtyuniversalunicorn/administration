@@ -1,8 +1,8 @@
-import { appConfig } from "@/src/core/config/appConfig";
-import { setItemStatusAction } from "@/src/core/items/actions/itemActions";
-import { DeleteItemButton } from "@/src/core/items/components/delete-item-button";
-import { ImagePreview } from "@/src/core/items/components/image-preview";
+import { setItemStatusAction } from "@/src/features/items/actions/itemActions";
+import { DeleteItemButton } from "@/src/features/items/components/delete-item-button";
+import { ImagePreview } from "@/src/features/items/components/image-preview";
 import { prisma } from "@/src/lib/prisma";
+import { itemsFeature } from "@/src/features/items/config";
 
 const th = "px-3 py-2 text-left font-medium text-muted";
 const td = "px-3 py-2";
@@ -38,7 +38,7 @@ export default async function Items({
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Items ({items.length})</h1>
 				<a
-					href={appConfig.routes.itemNew}
+					href={itemsFeature.routes.new}
 					className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
 				>
 					Add item
@@ -51,8 +51,8 @@ export default async function Items({
 						key={f.key}
 						href={
 							f.key === "all"
-								? appConfig.routes.items
-								: `${appConfig.routes.items}?status=${f.key}`
+								? itemsFeature.routes.index
+								: `${itemsFeature.routes.index}?status=${f.key}`
 						}
 						className={`rounded-full border px-3 py-1 ${
 							filter === f.key
@@ -99,7 +99,7 @@ export default async function Items({
 									</td>
 									<td className={`${td} capitalize`}>
 										<a
-											href={appConfig.routes.item(item.id)}
+											href={itemsFeature.routes.detail(item.id)}
 											className="font-medium hover:underline"
 										>
 											{item.category}
@@ -135,7 +135,7 @@ export default async function Items({
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
 											<a
-												href={appConfig.routes.itemEdit(item.id)}
+												href={itemsFeature.routes.edit(item.id)}
 												className="text-foreground hover:underline"
 											>
 												Edit
