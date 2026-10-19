@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { APIError } from "better-auth/api";
 import { prisma } from "./prisma";
 
 function createAuth() {
@@ -9,6 +10,17 @@ function createAuth() {
 			// Admin-only app: public self-registration is closed.
 			// Users are created from /dashboard/users via createUser() in lib/create-user.ts.
 			disableSignUp: true,
+		},
+		databaseHooks: {
+			session: {
+				create: {
+					// Inactive users keep their record but cannot sign in.
+					before: async (session) => {
+						const user = await prisma.user.findUnique({ where: { id: session.userId }, select: { status: true } });
+						if (user?.status === "INACTIVE") throw new APIError("FORBIDDEN", { message: "This account is inactive." });
+					},
+				},
+			},
 		},
 		database: prismaAdapter(prisma, {
 			provider: "postgresql",

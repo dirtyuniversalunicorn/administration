@@ -21,23 +21,32 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Users are never deleted: INACTIVE users cannot sign in but keep their authored content.
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model User {
-  id            String    @id
-  email         String    @unique
+  id            String     @id
+  email         String     @unique
   name          String?
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  status        UserStatus @default(ACTIVE)
+  deactivatedAt DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   sessions      Session[]
   accounts      Account[]
-  items         Item[]    @relation("ItemPostedBy")
-  editedItems   Item[]    @relation("ItemEditedBy")
-  contact       Contact[] @relation("ContactPostedBy")
-  editedContact Contact[] @relation("ContactEditedBy")
-  blogs         Blog[]    @relation("BlogPostedBy")
-  editedBlogs   Blog[]    @relation("BlogEditedBy")
+  items         Item[]     @relation("ItemPostedBy")
+  editedItems   Item[]     @relation("ItemEditedBy")
+  contact       Contact[]  @relation("ContactPostedBy")
+  editedContact Contact[]  @relation("ContactEditedBy")
+  blogs         Blog[]     @relation("BlogPostedBy")
+  editedBlogs   Blog[]     @relation("BlogEditedBy")
 
+  @@index([status])
   @@map("user")
 }
 

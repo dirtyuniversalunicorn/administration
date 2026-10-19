@@ -4,14 +4,11 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { appConfig } from "@/src/core/config/appConfig";
 import { auth } from "@/src/lib/auth";
-import { createUser } from "@/src/lib/create-user";
+import { createUser } from "@/src/features/users/services/createUser";
 
 export type CreateUserState = { ok: boolean; message: string };
 
-export async function createUserAction(
-	_prev: CreateUserState,
-	formData: FormData,
-): Promise<CreateUserState> {
+export async function createUserAction(_prev: CreateUserState, formData: FormData): Promise<CreateUserState> {
 	const session = await auth.api.getSession({ headers: await headers() });
 	if (!session) return { ok: false, message: "Not authorized." };
 
