@@ -1,7 +1,6 @@
-import { saveContactAction } from "@/src/features/contact/actions/contactActions";
 import { ContactForm } from "@/src/features/contact/components/contact-form";
-import { getContact } from "@/src/features/contact/queries";
 import { contactFeature } from "@/src/features/contact/config";
+import { getContact } from "@/src/features/contact/queries";
 
 export default async function EditContact() {
 	const contact = await getContact();
@@ -15,8 +14,7 @@ export default async function EditContact() {
 				{contact ? "Edit contact information" : "Add contact information"}
 			</h1>
 			<ContactForm
-				action={saveContactAction}
-				submitLabel={contact ? "Save changes" : "Add contact information"}
+				mode={contact ? "edit" : "add"}
 				defaults={
 					contact
 						? {

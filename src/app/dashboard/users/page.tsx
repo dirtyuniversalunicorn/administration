@@ -18,17 +18,12 @@ export default async function Users() {
 			) : (
 				<ul className="flex flex-col divide-y divide-line rounded-md border border-line bg-surface">
 					{users.map((user) => (
-						<li
-							key={user.id}
-							className="flex items-center justify-between gap-4 px-4 py-3 text-sm"
-						>
+						<li key={user.id} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
 							<div className="flex flex-col">
 								<span className="font-medium">{user.name ?? "—"}</span>
 								<span className="text-muted">{user.email}</span>
 							</div>
-							<span className="text-muted">
-								{user.createdAt.toLocaleDateString("en-GB")}
-							</span>
+							<span className="text-muted">{user.createdAt.toLocaleDateString("en-GB")}</span>
 						</li>
 					))}
 				</ul>

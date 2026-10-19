@@ -4,8 +4,7 @@ import { useState } from "react";
 import { appConfig } from "@/src/core/config/appConfig";
 import { authClient } from "@/src/lib/auth-client";
 
-const input =
-	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
+const input = "w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function LoginForm() {
 	const [error, setError] = useState("");
@@ -30,20 +29,8 @@ export function LoginForm() {
 
 	return (
 		<form onSubmit={onSubmit} className="flex flex-col gap-4">
-			<input
-				className={input}
-				name="email"
-				type="email"
-				placeholder="Email"
-				required
-			/>
-			<input
-				className={input}
-				name="password"
-				type="password"
-				placeholder="Password"
-				required
-			/>
+			<input className={input} name="email" type="email" placeholder="Email" required />
+			<input className={input} name="password" type="password" placeholder="Password" required />
 			<button
 				type="submit"
 				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"

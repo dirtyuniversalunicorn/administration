@@ -1,14 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import {
-	type CreateUserState,
-	createUserAction,
-} from "../actions/createUserAction";
+import { type CreateUserState, createUserAction } from "../actions/createUserAction";
 
 const initial: CreateUserState = { ok: false, message: "" };
-const input =
-	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
+const input = "w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
 export function RegisterForm() {
 	const [state, action, pending] = useActionState(createUserAction, initial);
@@ -16,13 +12,7 @@ export function RegisterForm() {
 	return (
 		<form action={action} className="flex flex-col gap-4">
 			<input className={input} name="name" placeholder="Name" required />
-			<input
-				className={input}
-				name="email"
-				type="email"
-				placeholder="Email"
-				required
-			/>
+			<input className={input} name="email" type="email" placeholder="Email" required />
 			<input
 				className={input}
 				name="password"
@@ -39,11 +29,7 @@ export function RegisterForm() {
 				{pending ? "Creating..." : "Create user"}
 			</button>
 			{state.message && (
-				<p
-					className={state.ok ? "text-sm text-success" : "text-sm text-danger"}
-				>
-					{state.message}
-				</p>
+				<p className={state.ok ? "text-sm text-success" : "text-sm text-danger"}>{state.message}</p>
 			)}
 		</form>
 	);

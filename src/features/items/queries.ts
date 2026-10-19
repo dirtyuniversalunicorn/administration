@@ -32,3 +32,14 @@ export function getPublicItem(id: string) {
 		},
 	});
 }
+
+/** What the write endpoints return (admin only, so it includes the status). */
+export const adminItemSelect = {
+	id: true,
+	category: true,
+	technique: true,
+	imageUrl: true,
+	status: true,
+	createdAt: true,
+	editedAt: true,
+} as const;

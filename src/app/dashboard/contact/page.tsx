@@ -1,5 +1,5 @@
-import { getContact } from "@/src/features/contact/queries";
 import { contactFeature } from "@/src/features/contact/config";
+import { getContact } from "@/src/features/contact/queries";
 
 export default async function Contact() {
 	const contact = await getContact();
@@ -51,8 +51,8 @@ export default async function Contact() {
 			) : (
 				<div className="flex flex-col items-start gap-4 rounded-md border border-line bg-surface p-6">
 					<p className="text-sm text-muted">
-						No contact information has been added yet. Add it here and it will
-						be available to show on your site.
+						No contact information has been added yet. Add it here and it will be available to show
+						on your site.
 					</p>
 					<a
 						href={contactFeature.routes.edit}

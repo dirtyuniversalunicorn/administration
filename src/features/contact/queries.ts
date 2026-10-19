@@ -13,3 +13,21 @@ export function getContact() {
 		},
 	});
 }
+
+/** The fields that are safe to give anyone: no ids, no admin names or emails. */
+export const publicContactSelect = {
+	email: true,
+	phone: true,
+	mobile: true,
+	address: true,
+	openingHours: true,
+	updatedAt: true,
+} as const;
+
+/** What `GET /api/contact/get` returns (null when nothing has been added yet). */
+export function getPublicContact() {
+	return prisma.contact.findFirst({
+		orderBy: { createdAt: "asc" },
+		select: publicContactSelect,
+	});
+}

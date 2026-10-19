@@ -23,8 +23,7 @@ export async function readEmail(request: Request): Promise<string | null> {
 	const body = (await request.json().catch(() => null)) as {
 		email?: unknown;
 	} | null;
-	const email =
-		typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+	const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
 	return email.length <= 254 && EMAIL_RE.test(email) ? email : null;
 }
 
@@ -44,8 +43,7 @@ export async function requestSubscription(email: string): Promise<void> {
 	if (
 		existing?.status === "PENDING" &&
 		existing.confirmSentAt &&
-		now.getTime() - existing.confirmSentAt.getTime() <
-			resendCooldownSeconds * 1000
+		now.getTime() - existing.confirmSentAt.getTime() < resendCooldownSeconds * 1000
 	) {
 		return;
 	}
@@ -54,9 +52,7 @@ export async function requestSubscription(email: string): Promise<void> {
 	const data = {
 		status: "PENDING" as const,
 		confirmToken,
-		confirmTokenExpiresAt: new Date(
-			now.getTime() + confirmTtlHours * 3600 * 1000,
-		),
+		confirmTokenExpiresAt: new Date(now.getTime() + confirmTtlHours * 3600 * 1000),
 		confirmSentAt: now,
 	};
 	await prisma.subscription.upsert({
@@ -80,8 +76,7 @@ export async function confirmSubscription(token: string): Promise<boolean> {
 	const row = await prisma.subscription.findUnique({
 		where: { confirmToken: token },
 	});
-	if (!row?.confirmTokenExpiresAt || row.confirmTokenExpiresAt < new Date())
-		return false;
+	if (!row?.confirmTokenExpiresAt || row.confirmTokenExpiresAt < new Date()) return false;
 
 	await prisma.subscription.update({
 		where: { id: row.id },

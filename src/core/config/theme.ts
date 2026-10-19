@@ -1,8 +1,7 @@
 import type { CSSProperties } from "react";
 import { appConfig, type ThemeColors } from "./appConfig";
 
-const kebab = (key: string) =>
-	key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+const kebab = (key: string) => key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
 /**
  * CSS variables for the active theme, set on <html> in the root layout. The

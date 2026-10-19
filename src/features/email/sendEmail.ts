@@ -11,9 +11,7 @@ type Message = { to: string; subject: string; html: string; text: string };
 export async function sendEmail(message: Message): Promise<void> {
 	const apiKey = process.env.RESEND_API_KEY;
 	if (!apiKey) {
-		console.warn(
-			`[email] RESEND_API_KEY not set, not sending. To: ${message.to}\n${message.text}`,
-		);
+		console.warn(`[email] RESEND_API_KEY not set, not sending. To: ${message.to}\n${message.text}`);
 		return;
 	}
 
@@ -32,8 +30,6 @@ export async function sendEmail(message: Message): Promise<void> {
 		}),
 	});
 	if (!response.ok) {
-		throw new Error(
-			`Email provider responded ${response.status}: ${await response.text()}`,
-		);
+		throw new Error(`Email provider responded ${response.status}: ${await response.text()}`);
 	}
 }

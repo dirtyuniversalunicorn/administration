@@ -33,3 +33,15 @@ export function getPublicBlog(id: string) {
 		},
 	});
 }
+
+/** What the write endpoints return (admin only, so it includes the status). */
+export const adminBlogSelect = {
+	id: true,
+	title: true,
+	excerpt: true,
+	content: true,
+	imageUrl: true,
+	status: true,
+	createdAt: true,
+	editedAt: true,
+} as const;

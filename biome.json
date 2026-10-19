@@ -16,7 +16,8 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"lineWidth": 200
 	},
 	"linter": {
 		"enabled": true,

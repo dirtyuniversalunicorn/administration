@@ -1,42 +1,36 @@
 "use client";
 
+import {
+	BellRing,
+	Contact,
+	Globe,
+	Group,
+	Languages,
+	LayoutDashboardIcon,
+	ListCollapseIcon,
+	ListTreeIcon,
+	Newspaper,
+	Search,
+	User,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import Link from "vinext/shims/link";
 import { SignOutButton } from "@/src/core/auth/components/sign-out-button";
 import { appConfig } from "@/src/core/config/appConfig";
 import type { NavEntry, NavIcon } from "@/src/core/config/feature";
 import { SIDEBAR_COOKIE } from "./sidebar-cookie";
-import { BellRing, Contact, Globe, Group, Languages, LayoutDashboardIcon, ListCollapseIcon, ListTreeIcon, Newspaper, Search, User } from "lucide-react";
-import Link from "vinext/shims/link";
 
 const icons: Record<NavIcon, ReactNode> = {
-	dashboard: (
-		<LayoutDashboardIcon />
-	),
-	items: (
-		<Group />
-	),
-	blogs: (
-		<Newspaper />
-	),
-	users: (
-		<User />
-	),
-	contact: (
-		<Contact />
-	),
-	translations: (
-		<Languages />
-	),
-	website: (
-		<Globe />
-	),
-	subscriptions: (
-		<BellRing />
-	),
-	seo: (
-		<Search />
-	),
+	dashboard: <LayoutDashboardIcon />,
+	items: <Group />,
+	blogs: <Newspaper />,
+	users: <User />,
+	contact: <Contact />,
+	translations: <Languages />,
+	website: <Globe />,
+	subscriptions: <BellRing />,
+	seo: <Search />,
 };
 
 function isActive(pathname: string, href: string) {
@@ -82,9 +76,7 @@ export function DashboardShell({
 				>
 					{!collapsed && (
 						<Link href={appConfig.routes.home}>
-						<span className="truncate px-1 font-semibold">
-							{appConfig.site.name}
-						</span>
+							<span className="truncate px-1 font-semibold">{appConfig.site.name}</span>
 						</Link>
 					)}
 					<button
@@ -99,10 +91,7 @@ export function DashboardShell({
 					</button>
 				</div>
 
-				<nav
-					aria-label="Main"
-					className="flex flex-1 flex-col gap-1 overflow-y-auto p-2"
-				>
+				<nav aria-label="Main" className="flex flex-1 flex-col gap-1 overflow-y-auto p-2">
 					{nav.map((item) => {
 						const active = isActive(pathname, item.href);
 						return (

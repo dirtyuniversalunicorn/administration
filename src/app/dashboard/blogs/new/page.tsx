@@ -1,4 +1,3 @@
-import { createBlogAction } from "@/src/features/blogs/actions/blogActions";
 import { BlogForm } from "@/src/features/blogs/components/blog-form";
 import { blogsFeature } from "@/src/features/blogs/config";
 
@@ -9,7 +8,7 @@ export default function NewBlog() {
 				← All blogs
 			</a>
 			<h1 className="text-2xl font-semibold">Add blog</h1>
-			<BlogForm action={createBlogAction} submitLabel="Create blog" />
+			<BlogForm mode="add" />
 		</section>
 	);
 }

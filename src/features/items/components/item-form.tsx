@@ -1,61 +1,54 @@
 "use client";
 
-import { useActionState } from "react";
-import type { ItemFormState } from "../actions/itemActions";
+import { useState } from "react";
+import { postJson } from "@/src/core/ui/post-json";
+import { itemsFeature } from "../config";
+import { type ItemFields, itemKeys } from "../validation";
 
 type Props = {
-	action: (prev: ItemFormState, formData: FormData) => Promise<ItemFormState>;
-	submitLabel: string;
-	defaults?: { category: string; technique: string; imageUrl: string };
+	/** "add" creates an item, "edit" changes the item with `id`. */
+	mode: "add" | "edit";
+	id?: string;
+	defaults?: ItemFields;
 };
 
-const initial: ItemFormState = { ok: false, message: "" };
-const input =
-	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
+const input = "w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 
-export function ItemForm({ action, submitLabel, defaults }: Props) {
-	const [state, formAction, pending] = useActionState(action, initial);
+/**
+ * Talks to the same /api/item/* endpoints that any other client would use. The
+ * fields are uncontrolled and the form is not a server action, so a failed save
+ * leaves everything you typed in place.
+ */
+export function ItemForm({ mode, id, defaults }: Props) {
+	const [error, setError] = useState("");
+	const [pending, setPending] = useState(false);
+
+	async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		const data = new FormData(e.currentTarget);
+		const fields = Object.fromEntries(itemKeys.map((key) => [key, String(data.get(key) ?? "")]));
+
+		setPending(true);
+		setError("");
+		const result = await postJson(mode === "add" ? itemsFeature.routes.api.add : itemsFeature.routes.api.edit, mode === "add" ? fields : { id, ...fields });
+		if (!result.ok) {
+			setError(result.error);
+			setPending(false);
+			return;
+		}
+		// A full navigation, so the list is rendered with the new data.
+		window.location.href = itemsFeature.routes.index;
+	}
 
 	return (
-		<form action={formAction} className="flex flex-col gap-4">
-			<input
-				className={input}
-				name="category"
-				placeholder="Category"
-				defaultValue={defaults?.category}
-				maxLength={100}
-				required
-			/>
-			<input
-				className={input}
-				name="technique"
-				placeholder="Technique"
-				defaultValue={defaults?.technique}
-				maxLength={100}
-				required
-			/>
-			<input
-				className={input}
-				name="imageUrl"
-				type="url"
-				placeholder="Image link (https://...)"
-				defaultValue={defaults?.imageUrl}
-				required
-			/>
-			<button
-				type="submit"
-				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-				disabled={pending}
-			>
-				{pending ? "Saving..." : submitLabel}
+		<form onSubmit={onSubmit} className="flex flex-col gap-4">
+			<input className={input} name="category" placeholder="Category" defaultValue={defaults?.category} maxLength={100} required />
+			<input className={input} name="technique" placeholder="Technique" defaultValue={defaults?.technique} maxLength={100} required />
+			<input className={input} name="imageUrl" type="url" placeholder="Image link (https://...)" defaultValue={defaults?.imageUrl} required />
+			<button type="submit" className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50" disabled={pending}>
+				{pending ? "Saving..." : mode === "add" ? "Create item" : "Save changes"}
 			</button>
-			{state.message && (
-				<p
-					className={state.ok ? "text-sm text-success" : "text-sm text-danger"}
-				>
-					{state.message}
-				</p>
-			)}
+			{error && <p className="text-sm text-danger">{error}</p>}
 		</form>
 	);
 }

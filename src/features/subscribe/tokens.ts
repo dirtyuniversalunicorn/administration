@@ -15,22 +15,17 @@ function appOrigin(): string {
 	return (process.env.BETTER_AUTH_URL ?? "").replace(/\/+$/, "");
 }
 
-export const confirmUrl = (token: string) =>
-	`${appOrigin()}/api/subscribe/confirm?token=${token}`;
+export const confirmUrl = (token: string) => `${appOrigin()}/api/subscribe/confirm?token=${token}`;
 
 /** For footers of future emails: one click unsubscribes. */
 export const unsubscribeUrl = (token: string) =>
 	`${appOrigin()}/api/subscribe/delete?token=${token}`;
 
 /** Where the visitor lands in the client-facing app after clicking an email link. */
-export function resultRedirect(
-	status: "confirmed" | "unsubscribed" | "invalid",
-): Response {
-	const base = (
-		process.env.CLIENT_APP_URL ?? subscribeFeature.settings.clientAppUrl
-	).replace(/\/+$/, "");
-	return Response.redirect(
-		`${base}${subscribeFeature.settings.resultPath}?status=${status}`,
-		302,
+export function resultRedirect(status: "confirmed" | "unsubscribed" | "invalid"): Response {
+	const base = (process.env.CLIENT_APP_URL ?? subscribeFeature.settings.clientAppUrl).replace(
+		/\/+$/,
+		"",
 	);
+	return Response.redirect(`${base}${subscribeFeature.settings.resultPath}?status=${status}`, 302);
 }

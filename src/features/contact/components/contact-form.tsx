@@ -1,47 +1,70 @@
 "use client";
 
-import { useActionState } from "react";
-import type {
-	ContactFormState,
-	ContactValues,
-} from "../actions/contactActions";
+import { useState } from "react";
+import { contactFeature } from "../config";
+import { type ContactFields, contactKeys } from "../validation";
 
 type Props = {
-	action: (
-		prev: ContactFormState,
-		formData: FormData,
-	) => Promise<ContactFormState>;
-	submitLabel: string;
-	defaults?: {
-		email: string | null;
-		phone: string | null;
-		mobile: string | null;
-		address: string | null;
-		openingHours: string | null;
-	};
+	/** "add" creates the contact information, "edit" changes it. */
+	mode: "add" | "edit";
+	defaults?: ContactFields;
 };
 
-const initial: ContactFormState = { ok: false, message: "" };
-const input =
-	"w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
+const input = "w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm";
 const label = "flex flex-col gap-1 text-sm font-medium";
 
-export function ContactForm({ action, submitLabel, defaults }: Props) {
-	const [state, formAction, pending] = useActionState(action, initial);
-	// After a failed save, show what was submitted (React clears uncontrolled
-	// fields after a form action, so the typed text would otherwise be lost).
-	const value = (key: keyof ContactValues) =>
-		state.values?.[key] ?? defaults?.[key] ?? "";
+/**
+ * Talks to the same /api/contact/* endpoints that any other client would use.
+ * The fields are uncontrolled and the form is not a server action, so a failed
+ * save leaves everything you typed in place.
+ */
+export function ContactForm({ mode, defaults }: Props) {
+	const [error, setError] = useState("");
+	const [pending, setPending] = useState(false);
+
+	async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		const data = new FormData(e.currentTarget);
+		// Blank fields are sent as "" so that, when editing, they clear the value.
+		const body = Object.fromEntries(contactKeys.map((key) => [key, String(data.get(key) ?? "")]));
+
+		setPending(true);
+		setError("");
+		try {
+			const response = await fetch(
+				mode === "add" ? contactFeature.routes.api.add : contactFeature.routes.api.edit,
+				{
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify(body),
+				},
+			);
+			if (!response.ok) {
+				const payload = (await response.json().catch(() => null)) as {
+					error?: string;
+				} | null;
+				setError(payload?.error ?? "Failed to save the contact information.");
+				setPending(false);
+				return;
+			}
+		} catch {
+			setError("Could not reach the server. Try again.");
+			setPending(false);
+			return;
+		}
+		// A full navigation, so the contact page is rendered with the new data.
+		window.location.href = contactFeature.routes.index;
+	}
 
 	return (
-		<form action={formAction} className="flex flex-col gap-4">
+		<form onSubmit={onSubmit} className="flex flex-col gap-4">
 			<label className={label}>
 				Email
 				<input
 					className={input}
 					name="email"
 					type="email"
-					defaultValue={value("email")}
+					defaultValue={defaults?.email ?? ""}
 					maxLength={254}
 				/>
 			</label>
@@ -51,7 +74,7 @@ export function ContactForm({ action, submitLabel, defaults }: Props) {
 					className={input}
 					name="phone"
 					type="tel"
-					defaultValue={value("phone")}
+					defaultValue={defaults?.phone ?? ""}
 					maxLength={30}
 				/>
 			</label>
@@ -61,7 +84,7 @@ export function ContactForm({ action, submitLabel, defaults }: Props) {
 					className={input}
 					name="mobile"
 					type="tel"
-					defaultValue={value("mobile")}
+					defaultValue={defaults?.mobile ?? ""}
 					maxLength={30}
 				/>
 			</label>
@@ -71,7 +94,7 @@ export function ContactForm({ action, submitLabel, defaults }: Props) {
 					className={input}
 					name="address"
 					rows={3}
-					defaultValue={value("address")}
+					defaultValue={defaults?.address ?? ""}
 					maxLength={300}
 				/>
 			</label>
@@ -82,7 +105,7 @@ export function ContactForm({ action, submitLabel, defaults }: Props) {
 					name="openingHours"
 					rows={3}
 					placeholder={"Mon–Fri 9:00–17:00\nSat 10:00–14:00"}
-					defaultValue={value("openingHours")}
+					defaultValue={defaults?.openingHours ?? ""}
 					maxLength={300}
 				/>
 			</label>
@@ -91,15 +114,9 @@ export function ContactForm({ action, submitLabel, defaults }: Props) {
 				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
 				disabled={pending}
 			>
-				{pending ? "Saving..." : submitLabel}
+				{pending ? "Saving..." : mode === "add" ? "Add contact information" : "Save changes"}
 			</button>
-			{state.message && (
-				<p
-					className={state.ok ? "text-sm text-success" : "text-sm text-danger"}
-				>
-					{state.message}
-				</p>
-			)}
+			{error && <p className="text-sm text-danger">{error}</p>}
 		</form>
 	);
 }

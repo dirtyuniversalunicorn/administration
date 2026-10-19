@@ -21,15 +21,10 @@ export default async function FeatureDisabled({
 
 	return (
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
-			<h1 className="text-2xl font-semibold">
-				The {label} feature is not enabled
-			</h1>
+			<h1 className="text-2xl font-semibold">The {label} feature is not enabled</h1>
 
 			<div className="rounded-md border border-line bg-surface p-6 text-sm">
-				<p>
-					This feature is turned off for this site, so its pages and API are not
-					available.
-				</p>
+				<p>This feature is turned off for this site, so its pages and API are not available.</p>
 			</div>
 
 			<a href={appConfig.routes.home} className="text-sm text-muted">

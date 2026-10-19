@@ -15,19 +15,13 @@ export function proxy(request: NextRequest) {
 		const access = accessRules.apiAccess(pathname, request.method);
 
 		if (access.kind === "disabled") {
-			return NextResponse.json(
-				{ error: "This feature is not enabled" },
-				{ status: 404 },
-			);
+			return NextResponse.json({ error: "This feature is not enabled" }, { status: 404 });
 		}
 		if (access.kind === "blocked") {
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 		if (access.kind === "method-not-allowed") {
-			return NextResponse.json(
-				{ error: "Method not allowed" },
-				{ status: 405 },
-			);
+			return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 		}
 		if (access.kind === "public") {
 			if (request.method === "OPTIONS") {
@@ -38,9 +32,7 @@ export function proxy(request: NextRequest) {
 			}
 			const response = NextResponse.next();
 			if (access.cors) {
-				for (const [k, v] of Object.entries(
-					accessRules.corsHeaders(origin, false),
-				))
+				for (const [k, v] of Object.entries(accessRules.corsHeaders(origin, false)))
 					response.headers.set(k, v);
 			}
 			return response;

@@ -89,8 +89,7 @@ const routes = {
 	/** User management (register form + list). */
 	users: "/dashboard/users",
 	/** Explains that a feature is turned off (the proxy rewrites its pages here). */
-	featureDisabled: (id: string) =>
-		`/dashboard/feature-disabled/${encodeURIComponent(id)}`,
+	featureDisabled: (id: string) => `/dashboard/feature-disabled/${encodeURIComponent(id)}`,
 };
 
 const featureFlags: Record<FeatureId, boolean> = {

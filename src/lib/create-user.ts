@@ -5,11 +5,7 @@ import { auth } from "./auth";
  * because public sign-up is disabled (and that flag also blocks auth.api.signUpEmail).
  * Does NOT create a session, so the calling admin stays logged in.
  */
-export async function createUser(input: {
-	name: string;
-	email: string;
-	password: string;
-}) {
+export async function createUser(input: { name: string; email: string; password: string }) {
 	const ctx = await auth.$context;
 	const email = input.email.trim().toLowerCase();
 
@@ -18,9 +14,7 @@ export async function createUser(input: {
 			`Password must be at least ${ctx.password.config.minPasswordLength} characters.`,
 		);
 	}
-	if (
-		await ctx.internalAdapter.findUserByEmail(email, { includeAccounts: false })
-	) {
+	if (await ctx.internalAdapter.findUserByEmail(email, { includeAccounts: false })) {
 		throw new Error("A user with this email already exists.");
 	}
 

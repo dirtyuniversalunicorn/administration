@@ -52,25 +52,18 @@ function cannotCheck(reason) {
 	process.exit(args.has("--strict") ? 2 : 0);
 }
 
-const config = JSON.parse(
-	stripJsonComments(readFileSync(`${root}wrangler.jsonc`, "utf8")),
-);
+const config = JSON.parse(stripJsonComments(readFileSync(`${root}wrangler.jsonc`, "utf8")));
 const bindings = config.hyperdrive ?? [];
-if (bindings.length === 0)
-	cannotCheck("no hyperdrive binding in wrangler.jsonc");
+if (bindings.length === 0) cannotCheck("no hyperdrive binding in wrangler.jsonc");
 
 let failed = false;
 for (const { binding, id } of bindings) {
 	let info;
 	try {
 		const output = wrangler("hyperdrive", "get", id);
-		info = JSON.parse(
-			output.slice(output.indexOf("{"), output.lastIndexOf("}") + 1),
-		);
+		info = JSON.parse(output.slice(output.indexOf("{"), output.lastIndexOf("}") + 1));
 	} catch (error) {
-		cannotCheck(
-			`${binding} (${id}): ${String(error.stderr || error.message).split("\n")[0]}`,
-		);
+		cannotCheck(`${binding} (${id}): ${String(error.stderr || error.message).split("\n")[0]}`);
 	}
 
 	if (info.caching?.disabled === true) {

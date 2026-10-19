@@ -35,8 +35,7 @@ function matches(pattern: string, pathname: string): boolean {
 }
 
 /** True for a path under `prefix` (or the prefix itself). */
-const under = (prefix: string, pathname: string) =>
-	matches(`${prefix}/*`, pathname);
+const under = (prefix: string, pathname: string) => matches(`${prefix}/*`, pathname);
 
 export function isApiPath(pathname: string): boolean {
 	return pathname === "/api" || pathname.startsWith("/api/");
@@ -49,8 +48,7 @@ export function isApiPath(pathname: string): boolean {
 export function createAccessRules(config: AccessConfig) {
 	return {
 		/** True when `pathname` is a protected page path or sits below one. */
-		isProtectedPath: (pathname: string) =>
-			config.protectedPaths.some((p) => under(p, pathname)),
+		isProtectedPath: (pathname: string) => config.protectedPaths.some((p) => under(p, pathname)),
 
 		/** The disabled feature a dashboard page belongs to, or null. */
 		disabledPageFeature: (pathname: string): FeatureId | null =>
@@ -62,8 +60,7 @@ export function createAccessRules(config: AccessConfig) {
 			if (config.disabledApiPrefixes.some((p) => under(p, pathname))) {
 				return { kind: "disabled" };
 			}
-			if (config.blockedApi.some((p) => matches(p, pathname)))
-				return { kind: "blocked" };
+			if (config.blockedApi.some((p) => matches(p, pathname))) return { kind: "blocked" };
 
 			const entry = config.publicApi.find((e) => matches(e.path, pathname));
 			if (!entry) return { kind: "session" };
@@ -74,10 +71,7 @@ export function createAccessRules(config: AccessConfig) {
 		},
 
 		/** CORS headers for an allowed request origin, or {} if the origin isn't allowed. */
-		corsHeaders(
-			origin: string | null,
-			preflight: boolean,
-		): Record<string, string> {
+		corsHeaders(origin: string | null, preflight: boolean): Record<string, string> {
 			const { allowedOrigins, allowedHeaders, maxAgeSeconds } = config.cors;
 			const any = allowedOrigins.includes("*");
 			if (!any && (!origin || !allowedOrigins.includes(origin))) return {};

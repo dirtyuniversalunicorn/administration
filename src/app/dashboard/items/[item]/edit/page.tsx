@@ -1,14 +1,9 @@
 import { notFound } from "next/navigation";
-import { updateItemAction } from "@/src/features/items/actions/itemActions";
 import { ItemForm } from "@/src/features/items/components/item-form";
-import { prisma } from "@/src/lib/prisma";
 import { itemsFeature } from "@/src/features/items/config";
+import { prisma } from "@/src/lib/prisma";
 
-export default async function EditItem({
-	params,
-}: {
-	params: Promise<{ item: string }>;
-}) {
+export default async function EditItem({ params }: { params: Promise<{ item: string }> }) {
 	const { item: id } = await params;
 	const item = await prisma.item.findUnique({ where: { id } });
 	if (!item) notFound();
@@ -20,8 +15,8 @@ export default async function EditItem({
 			</a>
 			<h1 className="text-2xl font-semibold">Edit item</h1>
 			<ItemForm
-				action={updateItemAction.bind(null, item.id)}
-				submitLabel="Save changes"
+				mode="edit"
+				id={item.id}
 				defaults={{
 					category: item.category,
 					technique: item.technique,

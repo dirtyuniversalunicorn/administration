@@ -1,4 +1,3 @@
-import { createItemAction } from "@/src/features/items/actions/itemActions";
 import { ItemForm } from "@/src/features/items/components/item-form";
 import { itemsFeature } from "@/src/features/items/config";
 
@@ -9,7 +8,7 @@ export default function NewItem() {
 				← All items
 			</a>
 			<h1 className="text-2xl font-semibold">Add item</h1>
-			<ItemForm action={createItemAction} submitLabel="Create item" />
+			<ItemForm mode="add" />
 		</section>
 	);
 }

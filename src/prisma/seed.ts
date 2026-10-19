@@ -9,9 +9,7 @@ const prisma = new PrismaClient({
 	adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
-const ADMIN_EMAIL = (
-	process.env.SEED_ADMIN_EMAIL ?? "admin@example.com"
-).toLowerCase();
+const ADMIN_EMAIL = (process.env.SEED_ADMIN_EMAIL ?? "admin@example.com").toLowerCase();
 
 const items = [
 	["painting", "oil on canvas"],
@@ -58,8 +56,7 @@ async function seedAdmin() {
 	// Gives you a working login: the password comes from SEED_ADMIN_PASSWORD, or
 	// is generated and printed once below.
 	const password =
-		process.env.SEED_ADMIN_PASSWORD ??
-		crypto.randomUUID().replaceAll("-", "").slice(0, 16);
+		process.env.SEED_ADMIN_PASSWORD ?? crypto.randomUUID().replaceAll("-", "").slice(0, 16);
 	const userId = crypto.randomUUID();
 
 	const user = await prisma.user.create({

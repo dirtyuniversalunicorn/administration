@@ -6,11 +6,7 @@ import { SIDEBAR_COOKIE } from "@/src/core/ui/sidebar-cookie";
 import { nav } from "@/src/features/registry";
 import { auth } from "@/src/lib/auth";
 
-export default async function DashboardLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
 	const session = await auth.api.getSession({ headers: await headers() });
 	if (!session) redirect(appConfig.routes.login);
 
@@ -18,11 +14,7 @@ export default async function DashboardLayout({
 	const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "1";
 
 	return (
-		<DashboardShell
-			email={session.user.email}
-			nav={nav}
-			defaultCollapsed={collapsed}
-		>
+		<DashboardShell email={session.user.email} nav={nav} defaultCollapsed={collapsed}>
 			{children}
 		</DashboardShell>
 	);

@@ -1,10 +1,6 @@
 import { createAccessRules } from "@/src/core/config/access";
 import { appConfig, isFeatureEnabled } from "@/src/core/config/appConfig";
-import type {
-	FeatureDefinition,
-	FeatureId,
-	NavEntry,
-} from "@/src/core/config/feature";
+import type { FeatureDefinition, FeatureId, NavEntry } from "@/src/core/config/feature";
 import { blogsFeature } from "./blogs/config";
 import { contactFeature } from "./contact/config";
 import { itemsFeature } from "./items/config";
@@ -38,18 +34,12 @@ export const allFeatures: AnyFeature[] = [
 // computation on static data, so it behaves the same in dev, build and prod).
 for (const id of Object.keys(appConfig.features) as FeatureId[]) {
 	if (!allFeatures.some((feature) => feature.id === id)) {
-		throw new Error(
-			`appConfig.features.${id} has no matching feature in src/features/registry.ts`,
-		);
+		throw new Error(`appConfig.features.${id} has no matching feature in src/features/registry.ts`);
 	}
 }
 
-export const enabledFeatures = allFeatures.filter((f) =>
-	isFeatureEnabled(f.id),
-);
-export const disabledFeatures = allFeatures.filter(
-	(f) => !isFeatureEnabled(f.id),
-);
+export const enabledFeatures = allFeatures.filter((f) => isFeatureEnabled(f.id));
+export const disabledFeatures = allFeatures.filter((f) => !isFeatureEnabled(f.id));
 
 const dashboardNav: NavEntry = {
 	label: "Dashboard",
@@ -83,14 +73,9 @@ export const nav: NavEntry[] = sidebar.flatMap((entry) => {
 
 export const accessRules = createAccessRules({
 	protectedPaths: appConfig.auth.protectedPaths,
-	publicApi: [
-		...appConfig.api.public,
-		...enabledFeatures.flatMap((f) => f.publicApi ?? []),
-	],
+	publicApi: [...appConfig.api.public, ...enabledFeatures.flatMap((f) => f.publicApi ?? [])],
 	blockedApi: appConfig.api.blocked,
-	disabledApiPrefixes: disabledFeatures.flatMap((f) =>
-		f.apiPrefix ? [f.apiPrefix] : [],
-	),
+	disabledApiPrefixes: disabledFeatures.flatMap((f) => (f.apiPrefix ? [f.apiPrefix] : [])),
 	disabledPages: disabledFeatures.flatMap((f) =>
 		f.pagePrefix ? [{ prefix: f.pagePrefix, id: f.id }] : [],
 	),

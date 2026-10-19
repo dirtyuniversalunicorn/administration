@@ -8,9 +8,7 @@ export const metadata: Metadata = {
 	description: appConfig.site.description,
 };
 
-export default function RootLayout({
-	children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang={appConfig.site.locale} style={getThemeStyle()}>
 			<body>{children}</body>
