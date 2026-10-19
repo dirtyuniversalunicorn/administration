@@ -24,7 +24,7 @@ export function LoginForm() {
 			setPending(false);
 			return;
 		}
-		window.location.href = appConfig.routes.home;
+		window.location.href = appConfig.routes.dashboard;
 	}
 
 	return (

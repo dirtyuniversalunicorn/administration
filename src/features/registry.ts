@@ -20,15 +20,7 @@ import { websiteFeature } from "./website/config";
 
 type AnyFeature = FeatureDefinition<unknown, unknown>;
 
-export const allFeatures: AnyFeature[] = [
-	itemsFeature,
-	blogsFeature,
-	contactFeature,
-	subscribeFeature,
-	translationsFeature,
-	websiteFeature,
-	seoFeature,
-];
+export const allFeatures: AnyFeature[] = [itemsFeature, blogsFeature, contactFeature, subscribeFeature, translationsFeature, websiteFeature, seoFeature];
 
 // A flag without a feature is a mistake worth failing loudly on (it is pure
 // computation on static data, so it behaves the same in dev, build and prod).
@@ -43,7 +35,7 @@ export const disabledFeatures = allFeatures.filter((f) => !isFeatureEnabled(f.id
 
 const dashboardNav: NavEntry = {
 	label: "Dashboard",
-	href: appConfig.routes.home,
+	href: appConfig.routes.dashboard,
 	icon: "dashboard",
 };
 const usersNav: NavEntry = {
@@ -53,17 +45,7 @@ const usersNav: NavEntry = {
 };
 
 /** Sidebar order: core pages and features interleaved as listed here. */
-const sidebar: (NavEntry | AnyFeature)[] = [
-	dashboardNav,
-	itemsFeature,
-	blogsFeature,
-	usersNav,
-	contactFeature,
-	subscribeFeature,
-	translationsFeature,
-	websiteFeature,
-	seoFeature,
-];
+const sidebar: (NavEntry | AnyFeature)[] = [dashboardNav, itemsFeature, blogsFeature, usersNav, contactFeature, subscribeFeature, translationsFeature, websiteFeature, seoFeature];
 
 /** Sidebar entries, with disabled features left out. */
 export const nav: NavEntry[] = sidebar.flatMap((entry) => {
@@ -76,8 +58,6 @@ export const accessRules = createAccessRules({
 	publicApi: [...appConfig.api.public, ...enabledFeatures.flatMap((f) => f.publicApi ?? [])],
 	blockedApi: appConfig.api.blocked,
 	disabledApiPrefixes: disabledFeatures.flatMap((f) => (f.apiPrefix ? [f.apiPrefix] : [])),
-	disabledPages: disabledFeatures.flatMap((f) =>
-		f.pagePrefix ? [{ prefix: f.pagePrefix, id: f.id }] : [],
-	),
+	disabledPages: disabledFeatures.flatMap((f) => (f.pagePrefix ? [{ prefix: f.pagePrefix, id: f.id }] : [])),
 	cors: appConfig.api.cors,
 });

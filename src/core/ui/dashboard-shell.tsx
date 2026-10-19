@@ -35,7 +35,7 @@ const icons: Record<NavIcon, ReactNode> = {
 
 function isActive(pathname: string, href: string) {
 	// The dashboard home must match exactly, or it would light up on every page.
-	if (href === appConfig.routes.home) return pathname === href;
+	if (href === appConfig.routes.dashboard) return pathname === href;
 	return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -75,7 +75,7 @@ export function DashboardShell({
 					}`}
 				>
 					{!collapsed && (
-						<Link href={appConfig.routes.home}>
+						<Link href={appConfig.routes.dashboard}>
 							<span className="truncate px-1 font-semibold">{appConfig.site.name}</span>
 						</Link>
 					)}

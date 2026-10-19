@@ -27,7 +27,7 @@ export default async function FeatureDisabled({
 				<p>This feature is turned off for this site, so its pages and API are not available.</p>
 			</div>
 
-			<a href={appConfig.routes.home} className="text-sm text-muted">
+			<a href={appConfig.routes.dashboard} className="text-sm text-muted">
 				← Back to the dashboard
 			</a>
 		</section>

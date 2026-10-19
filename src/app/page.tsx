@@ -6,7 +6,7 @@ import { LoginForm } from "../core/auth/components/login-form";
 
 export default async function Home() {
 	const session = await auth.api.getSession({ headers: await headers() });
-	if (session) redirect(appConfig.routes.home);
+	if (session) redirect(appConfig.routes.dashboard);
 
 	return (
 		<main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">

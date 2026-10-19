@@ -85,7 +85,7 @@ const routes = {
 	/** Public landing page with the login form. */
 	login: "/",
 	/** Where an authenticated user lands after login. */
-	home: "/dashboard",
+	dashboard: "/dashboard",
 	/** User management (register form + list). */
 	users: "/dashboard/users",
 	/** Explains that a feature is turned off (the proxy rewrites its pages here). */
