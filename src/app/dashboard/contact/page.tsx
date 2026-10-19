@@ -1,7 +1,9 @@
+import { currentUser } from "@/src/core/auth/session";
 import { contactFeature } from "@/src/features/contact/config";
 import { getContact } from "@/src/features/contact/queries";
 
 export default async function Contact() {
+	const { can } = await currentUser();
 	const contact = await getContact();
 
 	const rows: [string, string | null][] = contact
@@ -18,11 +20,8 @@ export default async function Contact() {
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Contact</h1>
-				{contact && (
-					<a
-						href={contactFeature.routes.edit}
-						className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-					>
+				{contact && can("write") && (
+					<a href={contactFeature.routes.edit} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
 						Edit contact information
 					</a>
 				)}
@@ -39,27 +38,18 @@ export default async function Contact() {
 						))}
 					</dl>
 					<p className="text-xs text-muted">
-						Last edited by{" "}
-						<span className="font-medium text-foreground">
-							{contact.editedBy.name ?? contact.editedBy.email}
-						</span>{" "}
-						on {contact.updatedAt.toLocaleString("en-GB")}. Added by{" "}
-						{contact.postedBy.name ?? contact.postedBy.email} on{" "}
-						{contact.createdAt.toLocaleDateString("en-GB")}.
+						Last edited by <span className="font-medium text-foreground">{contact.editedBy.name ?? contact.editedBy.email}</span> on {contact.updatedAt.toLocaleString("en-GB")}. Added by{" "}
+						{contact.postedBy.name ?? contact.postedBy.email} on {contact.createdAt.toLocaleDateString("en-GB")}.
 					</p>
 				</>
 			) : (
 				<div className="flex flex-col items-start gap-4 rounded-md border border-line bg-surface p-6">
-					<p className="text-sm text-muted">
-						No contact information has been added yet. Add it here and it will be available to show
-						on your site.
-					</p>
-					<a
-						href={contactFeature.routes.edit}
-						className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-					>
-						Add contact information
-					</a>
+					<p className="text-sm text-muted">No contact information has been added yet. Add it here and it will be available to show on your site.</p>
+					{can("write") && (
+						<a href={contactFeature.routes.edit} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+							Add contact information
+						</a>
+					)}
 				</div>
 			)}
 		</section>

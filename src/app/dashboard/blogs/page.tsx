@@ -1,3 +1,4 @@
+import { currentUser } from "@/src/core/auth/session";
 import { ApiButton } from "@/src/core/ui/api-button";
 import { DeleteButton } from "@/src/core/ui/delete-button";
 import { blogsFeature } from "@/src/features/blogs/config";
@@ -13,6 +14,7 @@ const filters = [
 ] as const;
 
 export default async function Blogs({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+	const { can } = await currentUser();
 	const { status } = await searchParams;
 	const filter = status === "active" || status === "inactive" ? status : "all";
 
@@ -29,9 +31,11 @@ export default async function Blogs({ searchParams }: { searchParams: Promise<{ 
 		<section className="flex flex-col gap-6">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Blogs ({blogs.length})</h1>
-				<a href={blogsFeature.routes.new} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-					Add blog
-				</a>
+				{can("write") && (
+					<a href={blogsFeature.routes.new} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+						Add blog
+					</a>
+				)}
 			</div>
 
 			<nav className="flex gap-2 text-sm">
@@ -84,15 +88,21 @@ export default async function Blogs({ searchParams }: { searchParams: Promise<{ 
 									</td>
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
-											<a href={blogsFeature.routes.edit(blog.id)} className="text-foreground hover:underline">
-												Edit
-											</a>
-											<ApiButton url={blogsFeature.routes.api.status} body={{ id: blog.id, status: active ? "INACTIVE" : "ACTIVE" }}>
-												{active ? "Inactivate" : "Activate"}
-											</ApiButton>
-											<DeleteButton url={blogsFeature.routes.api.delete} body={{ id: blog.id }} title="Delete blog">
-												Delete <strong>{blog.title}</strong> permanently? This cannot be undone.
-											</DeleteButton>
+											{can("write") && (
+												<>
+													<a href={blogsFeature.routes.edit(blog.id)} className="text-foreground hover:underline">
+														Edit
+													</a>
+													<ApiButton url={blogsFeature.routes.api.status} body={{ id: blog.id, status: active ? "INACTIVE" : "ACTIVE" }}>
+														{active ? "Inactivate" : "Activate"}
+													</ApiButton>
+												</>
+											)}
+											{can("delete") && (
+												<DeleteButton url={blogsFeature.routes.api.delete} body={{ id: blog.id }} title="Delete blog">
+													Delete <strong>{blog.title}</strong> permanently? This cannot be undone.
+												</DeleteButton>
+											)}
 										</div>
 									</td>
 								</tr>

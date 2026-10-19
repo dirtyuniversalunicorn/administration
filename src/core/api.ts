@@ -1,3 +1,4 @@
+import { can, type Permission } from "@/src/core/auth/roles";
 import { auth } from "@/src/lib/auth";
 
 /** JSON error body used by every API route: `{ "error": "message" }`. */
@@ -16,6 +17,18 @@ export function jsonError(status: number, message: string) {
 export async function requireSession(request: Request) {
 	const session = await auth.api.getSession({ headers: request.headers });
 	return session ?? jsonError(401, "Unauthorized");
+}
+
+/**
+ * Like requireSession, and also checks that the user's role allows
+ * `permission` (see core/auth/roles.ts). Returns the session, or a 401 / 403
+ * response that the route should return as is. The role is read from the
+ * database on every call, so a role change takes effect immediately.
+ */
+export async function requirePermission(request: Request, permission: Permission) {
+	const session = await requireSession(request);
+	if (session instanceof Response) return session;
+	return can(session.user.role, permission) ? session : jsonError(403, "Your role does not allow this.");
 }
 
 /**

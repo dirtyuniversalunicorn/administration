@@ -42,8 +42,7 @@ const blogs = [
 	{
 		title: "Draft: autumn exhibition announcement",
 		excerpt: "Not published yet.",
-		content:
-			"This is a draft that is hidden from the public site.\n\nOnce the dates are confirmed, set it to Active to publish it.",
+		content: "This is a draft that is hidden from the public site.\n\nOnce the dates are confirmed, set it to Active to publish it.",
 	},
 ];
 
@@ -55,8 +54,7 @@ async function seedAdmin() {
 
 	// Gives you a working login: the password comes from SEED_ADMIN_PASSWORD, or
 	// is generated and printed once below.
-	const password =
-		process.env.SEED_ADMIN_PASSWORD ?? crypto.randomUUID().replaceAll("-", "").slice(0, 16);
+	const password = process.env.SEED_ADMIN_PASSWORD ?? crypto.randomUUID().replaceAll("-", "").slice(0, 16);
 	const userId = crypto.randomUUID();
 
 	const user = await prisma.user.create({
@@ -65,6 +63,7 @@ async function seedAdmin() {
 			email: ADMIN_EMAIL,
 			name: "Admin",
 			emailVerified: true,
+			role: "ADMIN",
 			accounts: {
 				create: {
 					id: crypto.randomUUID(),
@@ -101,9 +100,7 @@ async function main() {
 				id,
 				...data,
 				editedById: admin.id,
-				...(i === items.length - 1
-					? { status: "INACTIVE" as const, deactivatedAt: new Date() }
-					: {}),
+				...(i === items.length - 1 ? { status: "INACTIVE" as const, deactivatedAt: new Date() } : {}),
 			},
 			update: data,
 		});
@@ -122,9 +119,7 @@ async function main() {
 				postedById: admin.id,
 				editedById: admin.id,
 				// The last post starts INACTIVE to demo the hidden state.
-				...(i === blogs.length - 1
-					? { status: "INACTIVE" as const, deactivatedAt: new Date() }
-					: {}),
+				...(i === blogs.length - 1 ? { status: "INACTIVE" as const, deactivatedAt: new Date() } : {}),
 			},
 			// Create-only: re-running the seed never overwrites a post you edited.
 			update: {},

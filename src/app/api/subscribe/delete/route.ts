@@ -1,8 +1,4 @@
-import {
-	isSubscriptionEnabled,
-	subscriptionDisabledResponse,
-	unsubscribeByToken,
-} from "@/src/features/subscribe/subscribe";
+import { isSubscriptionEnabled, subscriptionDisabledResponse, unsubscribeByToken } from "@/src/features/subscribe/subscribe";
 import { isValidToken, resultRedirect } from "@/src/features/subscribe/tokens";
 
 export const dynamic = "force-dynamic";

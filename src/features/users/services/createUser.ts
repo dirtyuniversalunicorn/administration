@@ -1,3 +1,4 @@
+import type { Role } from "@/src/core/auth/roles";
 import { auth } from "@/src/lib/auth";
 
 /**
@@ -5,7 +6,7 @@ import { auth } from "@/src/lib/auth";
  * because public sign-up is disabled (and that flag also blocks auth.api.signUpEmail).
  * Does NOT create a session, so the calling admin stays logged in.
  */
-export async function createUser(input: { name: string; email: string; password: string }) {
+export async function createUser(input: { name: string; email: string; password: string; role: Role }) {
 	const context = await auth.$context;
 	const email = input.email.trim().toLowerCase();
 
@@ -21,6 +22,7 @@ export async function createUser(input: { name: string; email: string; password:
 			email,
 			name: input.name.trim(),
 			emailVerified: true,
+			role: input.role,
 			// 2nd arg is only used by the optional validateUserInfo hook, which this app doesn't configure.
 		},
 		undefined as never,

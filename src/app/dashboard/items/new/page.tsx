@@ -1,7 +1,10 @@
+import { currentUser } from "@/src/core/auth/session";
+import { NoAccess } from "@/src/core/ui/no-access";
 import { ItemForm } from "@/src/features/items/components/item-form";
 import { itemsFeature } from "@/src/features/items/config";
 
-export default function NewItem() {
+export default async function NewItem() {
+	if (!(await currentUser()).can("write")) return <NoAccess />;
 	return (
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-6">
 			<a href={itemsFeature.routes.index} className="text-sm text-muted">

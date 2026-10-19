@@ -11,19 +11,21 @@ import { refresh } from "@/src/utils/refresh";
  *
  * Inactivating also revokes the user's open sessions, so they are signed out
  * right away. Refused: inactivating yourself, and inactivating the last
- * active user (nobody could sign in afterwards).
+ * active admin (nobody could manage users afterwards).
  */
 export async function setUserStatus(body: Record<string, unknown>, currentUserId: string) {
 	const input = parse(statusBodySchema, body);
 	if (!input.ok) return fail(400, input.error);
 	const { id, status } = input.value;
 
-	const user = await prisma.user.findUnique({ where: { id }, select: { id: true, status: true } });
+	const user = await prisma.user.findUnique({ where: { id }, select: { id: true, status: true, role: true } });
 	if (!user) return fail(404, "User not found.");
 
 	if (status === "INACTIVE" && user.status === "ACTIVE") {
 		if (id === currentUserId) return fail(400, "You cannot inactivate your own account.");
-		if ((await prisma.user.count({ where: { status: "ACTIVE" } })) <= 1) return fail(400, "The last active user cannot be inactivated.");
+		if (user.role === "ADMIN" && (await prisma.user.count({ where: { status: "ACTIVE", role: "ADMIN" } })) <= 1) {
+			return fail(400, "The last active admin cannot be inactivated.");
+		}
 	}
 
 	await prisma.user.update({

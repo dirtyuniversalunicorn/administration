@@ -31,11 +31,7 @@ export function LoginForm() {
 		<form onSubmit={onSubmit} className="flex flex-col gap-4">
 			<input className={input} name="email" type="email" placeholder="Email" required />
 			<input className={input} name="password" type="password" placeholder="Password" required />
-			<button
-				type="submit"
-				className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-				disabled={pending}
-			>
+			<button type="submit" className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50" disabled={pending}>
 				{pending ? "Signing in..." : "Sign in"}
 			</button>
 			{error && <p className="text-sm text-danger">{error}</p>}

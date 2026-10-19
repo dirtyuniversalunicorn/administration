@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { currentUser } from "@/src/core/auth/session";
 import { ApiButton } from "@/src/core/ui/api-button";
 import { DeleteButton } from "@/src/core/ui/delete-button";
 import { blogsFeature } from "@/src/features/blogs/config";
@@ -7,6 +8,7 @@ import { prisma } from "@/src/lib/prisma";
 const button = "rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium hover:bg-background";
 
 export default async function Blog({ params }: { params: Promise<{ blog: string }> }) {
+	const { can } = await currentUser();
 	const { blog: id } = await params;
 	const blog = await prisma.blog.findUnique({
 		where: { id },
@@ -32,15 +34,21 @@ export default async function Blog({ params }: { params: Promise<{ blog: string 
 				</div>
 				{blog.excerpt && <p className="text-muted">{blog.excerpt}</p>}
 				<div className="flex flex-wrap items-center gap-2">
-					<a href={blogsFeature.routes.edit(blog.id)} className={button}>
-						Edit
-					</a>
-					<ApiButton url={blogsFeature.routes.api.status} body={{ id: blog.id, status: active ? "INACTIVE" : "ACTIVE" }} className={button}>
-						{active ? "Inactivate" : "Activate"}
-					</ApiButton>
-					<DeleteButton url={blogsFeature.routes.api.delete} body={{ id: blog.id }} title="Delete blog" redirectTo={blogsFeature.routes.index} className={`${button} border-danger text-danger`}>
-						Delete <strong>{blog.title}</strong> permanently? This cannot be undone.
-					</DeleteButton>
+					{can("write") && (
+						<>
+							<a href={blogsFeature.routes.edit(blog.id)} className={button}>
+								Edit
+							</a>
+							<ApiButton url={blogsFeature.routes.api.status} body={{ id: blog.id, status: active ? "INACTIVE" : "ACTIVE" }} className={button}>
+								{active ? "Inactivate" : "Activate"}
+							</ApiButton>
+						</>
+					)}
+					{can("delete") && (
+						<DeleteButton url={blogsFeature.routes.api.delete} body={{ id: blog.id }} title="Delete blog" redirectTo={blogsFeature.routes.index} className={`${button} border-danger text-danger`}>
+							Delete <strong>{blog.title}</strong> permanently? This cannot be undone.
+						</DeleteButton>
+					)}
 				</div>
 			</header>
 

@@ -1,3 +1,4 @@
+import { currentUser } from "@/src/core/auth/session";
 import { ApiButton } from "@/src/core/ui/api-button";
 import { DeleteButton } from "@/src/core/ui/delete-button";
 import { ImagePreview } from "@/src/features/items/components/image-preview";
@@ -14,6 +15,7 @@ const filters = [
 ] as const;
 
 export default async function Items({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+	const { can } = await currentUser();
 	const { status } = await searchParams;
 	const filter = status === "active" || status === "inactive" ? status : "all";
 
@@ -30,9 +32,11 @@ export default async function Items({ searchParams }: { searchParams: Promise<{ 
 		<section className="flex flex-col gap-6">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Items ({items.length})</h1>
-				<a href={itemsFeature.routes.new} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-					Add item
-				</a>
+				{can("write") && (
+					<a href={itemsFeature.routes.new} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+						Add item
+					</a>
+				)}
 			</div>
 
 			<nav className="flex gap-2 text-sm">
@@ -90,19 +94,25 @@ export default async function Items({ searchParams }: { searchParams: Promise<{ 
 									</td>
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
-											<a href={itemsFeature.routes.edit(item.id)} className="text-foreground hover:underline">
-												Edit
-											</a>
-											<ApiButton url={itemsFeature.routes.api.status} body={{ id: item.id, status: active ? "INACTIVE" : "ACTIVE" }}>
-												{active ? "Inactivate" : "Activate"}
-											</ApiButton>
-											<DeleteButton url={itemsFeature.routes.api.delete} body={{ id: item.id }} title="Delete item">
-												Delete{" "}
-												<strong>
-													{item.category}, {item.technique}
-												</strong>{" "}
-												permanently? This cannot be undone.
-											</DeleteButton>
+											{can("write") && (
+												<>
+													<a href={itemsFeature.routes.edit(item.id)} className="text-foreground hover:underline">
+														Edit
+													</a>
+													<ApiButton url={itemsFeature.routes.api.status} body={{ id: item.id, status: active ? "INACTIVE" : "ACTIVE" }}>
+														{active ? "Inactivate" : "Activate"}
+													</ApiButton>
+												</>
+											)}
+											{can("delete") && (
+												<DeleteButton url={itemsFeature.routes.api.delete} body={{ id: item.id }} title="Delete item">
+													Delete{" "}
+													<strong>
+														{item.category}, {item.technique}
+													</strong>{" "}
+													permanently? This cannot be undone.
+												</DeleteButton>
+											)}
 										</div>
 									</td>
 								</tr>

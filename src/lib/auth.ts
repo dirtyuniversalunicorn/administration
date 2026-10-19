@@ -11,6 +11,12 @@ function createAuth() {
 			// Users are created from /dashboard/users via createUser() in lib/create-user.ts.
 			disableSignUp: true,
 		},
+		user: {
+			// Roles live on the user row. input: false means a client cannot set it through Better Auth.
+			additionalFields: {
+				role: { type: "string", input: false, defaultValue: "USER" },
+			},
+		},
 		databaseHooks: {
 			session: {
 				create: {

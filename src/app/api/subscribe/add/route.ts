@@ -1,9 +1,4 @@
-import {
-	isSubscriptionEnabled,
-	readEmail,
-	requestSubscription,
-	subscriptionDisabledResponse,
-} from "@/src/features/subscribe/subscribe";
+import { isSubscriptionEnabled, readEmail, requestSubscription, subscriptionDisabledResponse } from "@/src/features/subscribe/subscribe";
 
 // Anonymous visitors sign up here; the subscription stays PENDING until they
 // click the link in the confirmation email (see ../confirm).

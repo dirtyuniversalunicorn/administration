@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
+import { currentUser } from "@/src/core/auth/session";
+import { NoAccess } from "@/src/core/ui/no-access";
 import { ItemForm } from "@/src/features/items/components/item-form";
 import { itemsFeature } from "@/src/features/items/config";
 import { prisma } from "@/src/lib/prisma";
 
 export default async function EditItem({ params }: { params: Promise<{ item: string }> }) {
+	if (!(await currentUser()).can("write")) return <NoAccess />;
 	const { item: id } = await params;
 	const item = await prisma.item.findUnique({ where: { id } });
 	if (!item) notFound();

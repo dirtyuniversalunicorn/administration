@@ -1,8 +1,11 @@
+import { currentUser } from "@/src/core/auth/session";
+import { NoAccess } from "@/src/core/ui/no-access";
 import { ContactForm } from "@/src/features/contact/components/contact-form";
 import { contactFeature } from "@/src/features/contact/config";
 import { getContact } from "@/src/features/contact/queries";
 
 export default async function EditContact() {
+	if (!(await currentUser()).can("write")) return <NoAccess />;
 	const contact = await getContact();
 
 	return (
@@ -10,9 +13,7 @@ export default async function EditContact() {
 			<a href={contactFeature.routes.index} className="text-sm text-muted">
 				← Contact
 			</a>
-			<h1 className="text-2xl font-semibold">
-				{contact ? "Edit contact information" : "Add contact information"}
-			</h1>
+			<h1 className="text-2xl font-semibold">{contact ? "Edit contact information" : "Add contact information"}</h1>
 			<ContactForm
 				mode={contact ? "edit" : "add"}
 				defaults={
