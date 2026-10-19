@@ -6,6 +6,7 @@ import { LoginForm } from "../core/auth/components/login-form";
 
 export default async function Home() {
 	const session = await auth.api.getSession({ headers: await headers() });
+	
 	if (session) redirect(appConfig.routes.dashboard);
 
 	return (

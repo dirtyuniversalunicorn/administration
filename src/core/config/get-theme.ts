@@ -9,7 +9,7 @@ const kebab = (key: string) => key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}
  * name falls back to the configured one. Tailwind picks the variables up via
  * the @theme block in globals.css.
  */
-export function getThemeStyle(): CSSProperties {
+export function getTheme(): CSSProperties {
 	const { active, presets, overrides } = appConfig.theme;
 	const requested = process.env.THEME;
 	const colors: ThemeColors = {

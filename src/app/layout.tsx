@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { appConfig } from "@/src/core/config/appConfig";
-import { getThemeStyle } from "@/src/core/config/theme";
+import { getTheme } from "@/src/core/config/get-theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang={appConfig.site.locale} style={getThemeStyle()}>
+		<html lang={appConfig.site.locale} style={getTheme()}>
 			<body>{children}</body>
 		</html>
 	);

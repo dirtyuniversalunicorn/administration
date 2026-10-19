@@ -1,6 +1,6 @@
 import { createAccessRules } from "@/src/core/config/access";
 import { appConfig, isFeatureEnabled } from "@/src/core/config/appConfig";
-import type { FeatureDefinition, FeatureId, NavEntry } from "@/src/core/config/feature";
+import type { FeatureDefinition, FeatureId, NavEntry } from "@/src/core/config/define-feature";
 import { blogsFeature } from "./blogs/config";
 import { contactFeature } from "./contact/config";
 import { itemsFeature } from "./items/config";

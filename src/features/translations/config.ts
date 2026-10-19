@@ -1,4 +1,4 @@
-import { defineFeature } from "@/src/core/config/feature";
+import { defineFeature } from "@/src/core/config/define-feature";
 
 const base = "/dashboard/translations";
 

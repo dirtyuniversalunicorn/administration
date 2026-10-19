@@ -1,4 +1,4 @@
-import type { ApiRule, FeatureId } from "./feature";
+import type { ApiRule, FeatureId } from "./define-feature";
 
 /** Every color the UI uses. Pages use these through Tailwind classes like bg-primary. */
 export type ThemeColors = {

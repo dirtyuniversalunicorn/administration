@@ -1,4 +1,3 @@
-/** Shown instead of a page the signed-in user's role does not allow. */
 export function NoAccess() {
 	return (
 		<section className="mx-auto flex w-full max-w-xl flex-col gap-2">

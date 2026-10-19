@@ -19,7 +19,7 @@ type Props = {
 const th = "px-3 py-2 text-left font-medium text-muted";
 const td = "px-3 py-2";
 
-export default function UsersList({ users, session }: Props) {
+export default function UsersTable({ users, session }: Props) {
 	return (
 		<>
 			<h2 className="text-xl font-semibold">Users ({users.length})</h2>

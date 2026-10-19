@@ -18,7 +18,7 @@ import { type ReactNode, useState } from "react";
 import Link from "vinext/shims/link";
 import { SignOutButton } from "@/src/core/auth/components/sign-out-button";
 import { appConfig } from "@/src/core/config/appConfig";
-import type { NavEntry, NavIcon } from "@/src/core/config/feature";
+import type { NavEntry, NavIcon } from "@/src/core/config/define-feature";
 import { SIDEBAR_COOKIE } from "./sidebar-cookie";
 
 const icons: Record<NavIcon, ReactNode> = {

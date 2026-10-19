@@ -1,4 +1,4 @@
-import type { ApiRule, FeatureId } from "./feature";
+import type { ApiRule, FeatureId } from "./define-feature";
 
 /** Everything the proxy decides with. Built once by src/features/registry.ts. */
 export type AccessConfig = {
@@ -19,12 +19,7 @@ export type AccessConfig = {
 	};
 };
 
-export type ApiAccess =
-	| { kind: "blocked" }
-	| { kind: "disabled" }
-	| { kind: "public"; cors: boolean }
-	| { kind: "session" }
-	| { kind: "method-not-allowed" };
+export type ApiAccess = { kind: "blocked" } | { kind: "disabled" } | { kind: "public"; cors: boolean } | { kind: "session" } | { kind: "method-not-allowed" };
 
 function matches(pattern: string, pathname: string): boolean {
 	if (pattern.endsWith("/*")) {
@@ -51,8 +46,7 @@ export function createAccessRules(config: AccessConfig) {
 		isProtectedPath: (pathname: string) => config.protectedPaths.some((p) => under(p, pathname)),
 
 		/** The disabled feature a dashboard page belongs to, or null. */
-		disabledPageFeature: (pathname: string): FeatureId | null =>
-			config.disabledPages.find((p) => under(p.prefix, pathname))?.id ?? null,
+		disabledPageFeature: (pathname: string): FeatureId | null => config.disabledPages.find((p) => under(p.prefix, pathname))?.id ?? null,
 
 		/** How an /api request is treated. */
 		apiAccess(pathname: string, method: string): ApiAccess {
