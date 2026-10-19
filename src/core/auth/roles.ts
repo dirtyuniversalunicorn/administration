@@ -24,6 +24,6 @@ const grants: Record<Role, readonly Permission[]> = {
 export const roleLabel: Record<Role, string> = { ADMIN: "Admin", EDITOR: "Editor", USER: "User" };
 
 /** Whether a role may do something. An unknown or missing role may do nothing. */
-export function can(role: string | null | undefined, permission: Permission): boolean {
+export function hasPermission(role: string | null | undefined, permission: Permission): boolean {
 	return !!role && role in grants && grants[role as Role].includes(permission);
 }

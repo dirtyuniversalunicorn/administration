@@ -15,7 +15,7 @@ const filters = [
 ] as const;
 
 export default async function Items({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-	const { can } = await currentUser();
+	const { hasPermission } = await currentUser();
 	const { status } = await searchParams;
 	const filter = status === "active" || status === "inactive" ? status : "all";
 
@@ -32,7 +32,7 @@ export default async function Items({ searchParams }: { searchParams: Promise<{ 
 		<section className="flex flex-col gap-6">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Items ({items.length})</h1>
-				{can("write") && (
+				{hasPermission("write") && (
 					<a href={itemsFeature.routes.new} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
 						Add item
 					</a>
@@ -94,7 +94,7 @@ export default async function Items({ searchParams }: { searchParams: Promise<{ 
 									</td>
 									<td className={td}>
 										<div className="flex items-center justify-end gap-4">
-											{can("write") && (
+											{hasPermission("write") && (
 												<>
 													<a href={itemsFeature.routes.edit(item.id)} className="text-foreground hover:underline">
 														Edit
@@ -104,7 +104,7 @@ export default async function Items({ searchParams }: { searchParams: Promise<{ 
 													</ApiButton>
 												</>
 											)}
-											{can("delete") && (
+											{hasPermission("delete") && (
 												<DeleteButton url={itemsFeature.routes.api.delete} body={{ id: item.id }} title="Delete item">
 													Delete{" "}
 													<strong>

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { can, roles } from "@/src/core/auth/roles";
+import { hasPermission, roles } from "@/src/core/auth/roles";
 import { appConfig } from "@/src/core/config/appConfig";
 import { createUser } from "@/src/features/users/services/createUser";
 import { auth } from "@/src/lib/auth";
@@ -11,7 +11,7 @@ export type CreateUserState = { ok: boolean; message: string };
 
 export async function createUserAction(_prev: CreateUserState, formData: FormData): Promise<CreateUserState> {
 	const session = await auth.api.getSession({ headers: await headers() });
-	if (!session || !can(session.user.role, "users")) return { ok: false, message: "Not authorized." };
+	if (!session || !hasPermission(session.user.role, "users")) return { ok: false, message: "Not authorized." };
 
 	const name = String(formData.get("name") ?? "");
 	const email = String(formData.get("email") ?? "");

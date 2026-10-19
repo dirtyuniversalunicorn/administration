@@ -5,7 +5,7 @@ import { contactFeature } from "@/src/features/contact/config";
 import { getContact } from "@/src/features/contact/queries";
 
 export default async function EditContact() {
-	if (!(await currentUser()).can("write")) return <NoAccess />;
+	if (!(await currentUser()).hasPermission("write")) return <NoAccess />;
 	const contact = await getContact();
 
 	return (

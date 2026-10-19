@@ -8,7 +8,7 @@ import { prisma } from "@/src/lib/prisma";
 const button = "rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium hover:bg-background";
 
 export default async function Blog({ params }: { params: Promise<{ blog: string }> }) {
-	const { can } = await currentUser();
+	const { hasPermission } = await currentUser();
 	const { blog: id } = await params;
 	const blog = await prisma.blog.findUnique({
 		where: { id },
@@ -34,7 +34,7 @@ export default async function Blog({ params }: { params: Promise<{ blog: string 
 				</div>
 				{blog.excerpt && <p className="text-muted">{blog.excerpt}</p>}
 				<div className="flex flex-wrap items-center gap-2">
-					{can("write") && (
+					{hasPermission("write") && (
 						<>
 							<a href={blogsFeature.routes.edit(blog.id)} className={button}>
 								Edit
@@ -44,7 +44,7 @@ export default async function Blog({ params }: { params: Promise<{ blog: string 
 							</ApiButton>
 						</>
 					)}
-					{can("delete") && (
+					{hasPermission("delete") && (
 						<DeleteButton url={blogsFeature.routes.api.delete} body={{ id: blog.id }} title="Delete blog" redirectTo={blogsFeature.routes.index} className={`${button} border-danger text-danger`}>
 							Delete <strong>{blog.title}</strong> permanently? This cannot be undone.
 						</DeleteButton>

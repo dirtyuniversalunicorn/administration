@@ -6,7 +6,7 @@ import { blogsFeature } from "@/src/features/blogs/config";
 import { prisma } from "@/src/lib/prisma";
 
 export default async function EditBlog({ params }: { params: Promise<{ blog: string }> }) {
-	if (!(await currentUser()).can("write")) return <NoAccess />;
+	if (!(await currentUser()).hasPermission("write")) return <NoAccess />;
 	const { blog: id } = await params;
 	const blog = await prisma.blog.findUnique({ where: { id } });
 	if (!blog) notFound();

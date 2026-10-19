@@ -5,8 +5,8 @@ import UsersList from "@/src/features/users/components/users-lists";
 import { prisma } from "@/src/lib/prisma";
 
 export default async function Users() {
-	const { user, can } = await currentUser();
-	if (!can("users")) return <NoAccess />;
+	const { user, hasPermission } = await currentUser();
+	if (!hasPermission("users")) return <NoAccess />;
 
 	const users = await prisma.user.findMany({
 		select: { id: true, name: true, email: true, status: true, role: true, createdAt: true },

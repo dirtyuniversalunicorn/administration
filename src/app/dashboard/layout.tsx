@@ -1,6 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { can } from "@/src/core/auth/roles";
+import { hasPermission } from "@/src/core/auth/roles";
 import { appConfig } from "@/src/core/config/appConfig";
 import { DashboardShell } from "@/src/core/ui/dashboard-shell";
 import { SIDEBAR_COOKIE } from "@/src/core/ui/sidebar-cookie";
@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 	const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === "1";
 
 	return (
-		<DashboardShell email={session.user.email} nav={nav.filter((entry) => entry.href !== appConfig.routes.users || can(session.user.role, "users"))} defaultCollapsed={collapsed}>
+		<DashboardShell email={session.user.email} nav={nav.filter((entry) => entry.href !== appConfig.routes.users || hasPermission(session.user.role, "users"))} defaultCollapsed={collapsed}>
 			{children}
 		</DashboardShell>
 	);

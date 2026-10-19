@@ -1,4 +1,4 @@
-import { can, type Permission } from "@/src/core/auth/roles";
+import { hasPermission, type Permission } from "@/src/core/auth/roles";
 import { auth } from "@/src/lib/auth";
 
 /** JSON error body used by every API route: `{ "error": "message" }`. */
@@ -28,7 +28,7 @@ export async function requireSession(request: Request) {
 export async function requirePermission(request: Request, permission: Permission) {
 	const session = await requireSession(request);
 	if (session instanceof Response) return session;
-	return can(session.user.role, permission) ? session : jsonError(403, "Your role does not allow this.");
+	return hasPermission(session.user.role, permission) ? session : jsonError(403, "Your role does not allow this.");
 }
 
 /**
